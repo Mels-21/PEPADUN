@@ -98,7 +98,7 @@ app.post('/send-message', async (req, res) => {
 
 // Start the Express server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n=========================================`);
     console.log(`Local WhatsApp API Server is running on http://localhost:${PORT}`);
     console.log(`=========================================\n`);
