@@ -16,3 +16,7 @@ COPY . /var/www/html/
 
 # Set permission agar web server bisa menulis file (misal untuk folder uploads atau logs CodeIgniter)
 RUN chown -R www-data:www-data /var/www/html
+
+# Configure Apache to listen on Railway's PORT environment variable
+RUN sed -i 's/Listen 80/Listen ${PORT}/g' /etc/apache2/ports.conf
+RUN sed -i 's/:80/:${PORT}/g' /etc/apache2/sites-available/000-default.conf
