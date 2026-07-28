@@ -117,7 +117,9 @@ class Cron extends CI_Controller {
             'message' => $message
         ];
 
-        $ch = curl_init('https://eloquent-fulfillment-production-05d1.up.railway.app/send-message');
+        // Gunakan API URL dari Railway jika ada, jika tidak gunakan localhost (Laragon)
+        $api_url = getenv('WA_API_URL') ?: 'http://localhost:3000/send-message';
+        $ch = curl_init($api_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
