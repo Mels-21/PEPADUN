@@ -115,57 +115,115 @@
 </div>
 
 <!-- Table Section -->
-<div class="card" style="padding: 1.75rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <div style="display: flex; align-items: center; gap: 0.75rem; color: var(--danger);">
-            <div style="background-color: var(--danger); color: var(--white); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: bold;">!</div>
-            <h3 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Item Belum Update</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+    <!-- Item Belum Update Card -->
+    <div class="card" style="padding: 1.75rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; color: var(--danger);">
+                <div style="background-color: var(--danger); color: var(--white); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: bold;">!</div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Item Belum Update</h3>
+            </div>
+            <a href="<?= base_url("monitoring?year={$selectedYear}&triwulan={$selectedTriwulan}&status=pending") ?>" class="btn btn-secondary btn-sm" style="border-radius: var(--br-full); padding: 0.35rem 1rem; font-size: 0.8rem; font-weight: 600; color: var(--primary); border-color: var(--neutral-light);">
+                Lihat Semua <i class="bi bi-arrow-right"></i>
+            </a>
         </div>
-        <a href="<?= base_url("monitoring?year={$selectedYear}&triwulan={$selectedTriwulan}&status=pending") ?>" class="btn btn-secondary btn-sm" style="border-radius: var(--br-full); padding: 0.35rem 1rem; font-size: 0.8rem; font-weight: 600; color: var(--primary); border-color: var(--neutral-light);">
-            Lihat Semua <i class="bi bi-arrow-right"></i>
-        </a>
-    </div>
-    
-    <div class="table-responsive" style="border: none; box-shadow: none;">
-        <table class="custom-table" style="border-top: 1px dashed var(--neutral-light);">
-            <thead>
-                <tr>
-                    <th style="width: 45%; background: transparent; color: var(--text-muted); font-weight: 500; font-size: 0.8rem; border-bottom: 1px solid var(--neutral-light);">Item Informasi</th>
-                    <th style="width: 35%; background: transparent; color: var(--text-muted); font-weight: 500; font-size: 0.8rem; border-bottom: 1px solid var(--neutral-light);">Kategori</th>
-                    <th style="width: 20%; background: transparent; color: var(--text-muted); font-weight: 500; font-size: 0.8rem; border-bottom: 1px solid var(--neutral-light);">Keterangan</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php 
-                $hasPending = false;
-                if (isset($recentMonitoring) && !empty($recentMonitoring)): 
-                    foreach ($recentMonitoring as $item): 
-                        $hasPending = true;
-                ?>
-                        <tr>
-                            <td style="padding: 1rem;">
-                                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                    <i class="bi bi-exclamation-triangle" style="color: var(--danger); font-size: 1.1rem;"></i>
-                                    <span style="font-weight: 500; color: var(--text-dark); font-size: 0.9rem;"><?= esc($item['title']) ?></span>
-                                </div>
-                            </td>
-                            <td style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;"><?= esc($item['category_name'] ?: '-') ?></td>
-                            <td style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;"><?= esc($item['description'] ?: '-') ?></td>
-                        </tr>
-                <?php 
-                    endforeach;
-                endif; 
-                ?>
-                
-                <?php if (!$hasPending): ?>
+        
+        <div class="table-responsive" style="border: none; box-shadow: none;">
+            <table class="custom-table" style="border-top: 1px dashed var(--neutral-light);">
+                <thead>
                     <tr>
-                        <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 2rem;">
-                            Semua informasi pada Triwulan ini telah diperbarui!
-                        </td>
+                        <th style="width: 45%; background: transparent; color: var(--text-muted); font-weight: 500; font-size: 0.8rem; border-bottom: 1px solid var(--neutral-light);">Item Informasi</th>
+                        <th style="width: 35%; background: transparent; color: var(--text-muted); font-weight: 500; font-size: 0.8rem; border-bottom: 1px solid var(--neutral-light);">Kategori</th>
+                        <th style="width: 20%; background: transparent; color: var(--text-muted); font-weight: 500; font-size: 0.8rem; border-bottom: 1px solid var(--neutral-light);">Keterangan</th>
                     </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php 
+                    $hasPending = false;
+                    if (isset($recentMonitoring) && !empty($recentMonitoring)): 
+                        foreach ($recentMonitoring as $item): 
+                            $hasPending = true;
+                    ?>
+                            <tr>
+                                <td style="padding: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <i class="bi bi-exclamation-triangle" style="color: var(--danger); font-size: 1.1rem;"></i>
+                                        <span style="font-weight: 500; color: var(--text-dark); font-size: 0.9rem;"><?= esc($item['title']) ?></span>
+                                    </div>
+                                </td>
+                                <td style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;"><?= esc($item['category_name'] ?: '-') ?></td>
+                                <td style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;"><?= esc($item['description'] ?: '-') ?></td>
+                            </tr>
+                    <?php 
+                        endforeach;
+                    endif; 
+                    ?>
+                    
+                    <?php if (!$hasPending): ?>
+                        <tr>
+                            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                                Semua informasi pada Triwulan ini telah diperbarui!
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Item Sudah Diupdate Card -->
+    <div class="card" style="padding: 1.75rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; color: var(--success);">
+                <div style="background-color: var(--success); color: var(--white); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: bold;"><i class="bi bi-check-lg"></i></div>
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Item Sudah Diupdate</h3>
+            </div>
+            <a href="<?= base_url("monitoring?year={$selectedYear}&triwulan={$selectedTriwulan}&status=completed") ?>" class="btn btn-secondary btn-sm" style="border-radius: var(--br-full); padding: 0.35rem 1rem; font-size: 0.8rem; font-weight: 600; color: var(--primary); border-color: var(--neutral-light);">
+                Lihat Semua <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+        
+        <div class="table-responsive" style="border: none; box-shadow: none;">
+            <table class="custom-table" style="border-top: 1px dashed var(--neutral-light);">
+                <thead>
+                    <tr>
+                        <th style="width: 45%; background: transparent; color: var(--text-muted); font-weight: 500; font-size: 0.8rem; border-bottom: 1px solid var(--neutral-light);">Item Informasi</th>
+                        <th style="width: 35%; background: transparent; color: var(--text-muted); font-weight: 500; font-size: 0.8rem; border-bottom: 1px solid var(--neutral-light);">Kategori</th>
+                        <th style="width: 20%; background: transparent; color: var(--text-muted); font-weight: 500; font-size: 0.8rem; border-bottom: 1px solid var(--neutral-light);">Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    $hasCompleted = false;
+                    if (isset($recentCompleted) && !empty($recentCompleted)): 
+                        foreach ($recentCompleted as $item): 
+                            $hasCompleted = true;
+                    ?>
+                            <tr>
+                                <td style="padding: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <i class="bi bi-check-circle" style="color: var(--success); font-size: 1.1rem;"></i>
+                                        <span style="font-weight: 500; color: var(--text-dark); font-size: 0.9rem;"><?= esc($item['title']) ?></span>
+                                    </div>
+                                </td>
+                                <td style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;"><?= esc($item['category_name'] ?: '-') ?></td>
+                                <td style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem;"><?= esc($item['description'] ?: '-') ?></td>
+                            </tr>
+                    <?php 
+                        endforeach;
+                    endif; 
+                    ?>
+                    
+                    <?php if (!$hasCompleted): ?>
+                        <tr>
+                            <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                                Belum ada informasi yang diperbarui pada Triwulan ini.
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

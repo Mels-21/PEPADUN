@@ -106,6 +106,20 @@ class Dashboard extends Auth_Controller {
         ", [$selectedYear, $selectedTriwulan]);
         $data['recentMonitoring'] = $queryRecentPending->result_array();
 
+        // 5. Completed items for the selected year and triwulan
+        $queryRecentCompleted = $db->query("
+            SELECT mi.name as master_name, m.custom_name, IFNULL(m.custom_name, mi.name) as title, 
+                   c.name as category_name, m.status, m.description
+            FROM master_informasi mi
+            LEFT JOIN categories c ON c.id = mi.category_id
+            JOIN monitoring m ON m.master_id = mi.id AND m.year = ? AND m.triwulan = ?
+            WHERE m.status = 'completed'
+              AND (m.is_deleted = 0 OR m.is_deleted IS NULL)
+            ORDER BY m.updated_at DESC
+            LIMIT 5
+        ", [$selectedYear, $selectedTriwulan]);
+        $data['recentCompleted'] = $queryRecentCompleted->result_array();
+
         $data['selectedYear'] = $selectedYear;
         $data['selectedTriwulan'] = $selectedTriwulan;
         $data['title'] = 'Dashboard';
