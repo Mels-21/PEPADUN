@@ -188,3 +188,18 @@ body {
     background-color: #083c7a;
     box-shadow: 0 4px 12px rgba(10, 77, 158, 0.2);
 }
+
+/* Custom Alerts */
+.alert-custom {
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}

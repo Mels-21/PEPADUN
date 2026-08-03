@@ -30,7 +30,7 @@
 
         <div class="form-grid">
             <div class="form-group">
-                <label for="status">Status Perkembangan <span style="color: red;">*</span></label>
+                <label for="status">Status <span style="color: red;">*</span></label>
                 <select id="status" name="status" class="select-control" required>
                     <option value="" disabled <?= !$isEdit ? 'selected' : '' ?>>Pilih Status...</option>
                     <option value="pending" <?= old('status', $isEdit ? $monitoring['status'] : '') === 'pending' ? 'selected' : '' ?>>Belum Update (Pending)</option>
@@ -40,13 +40,13 @@
             </div>
 
             <div class="form-group">
-                <label for="pj">Penanggung Jawab (PJ) <span style="color: var(--text-muted); font-weight: normal; font-size: 0.8rem;">(Opsional)</span></label>
+                <label for="pj">Penanggung Jawab <span style="color: var(--text-muted); font-weight: normal; font-size: 0.8rem;">(Opsional)</span></label>
                 <input type="text" id="pj" name="pj" class="form-control" placeholder="Tuliskan nama PJ..." value="<?= old('pj', $isEdit ? $monitoring['pj'] : '') ?>" autocomplete="off">
             </div>
         </div>
 
         <div class="form-group">
-            <label for="description">Deskripsi & Catatan Perkembangan <span style="color: var(--text-muted); font-weight: normal; font-size: 0.8rem;">(Opsional)</span></label>
+            <label for="description">Deskripsi <span style="color: var(--text-muted); font-weight: normal; font-size: 0.8rem;">(Opsional)</span></label>
             <textarea id="description" name="description" class="textarea-control" style="min-height: 180px;" placeholder="Tuliskan catatan atau link dokumen di sini..."><?= old('description', $isEdit ? $monitoring['description'] : '') ?></textarea>
         </div>
 

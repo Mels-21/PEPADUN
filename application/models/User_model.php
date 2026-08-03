@@ -6,7 +6,7 @@ class User_model extends MY_Model {
     protected $primaryKey       = 'id_user';
     protected $allowedFields    = [
         'username', 'password', 'nama', 'role',
-        'email', 'nip', 'jabatan_id', 'substansi_id', 'image_user', 'level_user', 
+        'email', 'nip', 'jabatan_id', 'substansi_id', 'image_user', 
         'status_user', 'telp', 'no_dosir', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 
         'pangkat', 'tipe_pegawai', 'tmt_pangkat', 'eselon', 'kode_jabatan', 'kelas_jabatan', 
         'fungsi_jabatan', 'pendidikan', 'jurusan', 'tahun_lulus', 'nama_sekolah', 'agama', 

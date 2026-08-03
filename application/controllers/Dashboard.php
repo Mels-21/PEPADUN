@@ -21,6 +21,13 @@ class Dashboard extends Auth_Controller {
         $selectedTriwulan = $this->input->get('triwulan') !== NULL ? (int)$this->input->get('triwulan') : (int)ceil(date('m') / 3);
         $db = $this->db;
 
+        $pjFilter = "";
+        $queryParams = [$selectedYear, $selectedTriwulan];
+        if (session()->get('role') === 'karyawan') {
+            $pjFilter = " AND m.pj = ?";
+            $queryParams[] = session()->get('nama');
+        }
+
         // 1. Core counters
         $data['totalUsers'] = $userModel->countAllResults();
         $data['totalCategories'] = $categoryModel->countAllResults();
@@ -29,8 +36,8 @@ class Dashboard extends Auth_Controller {
             SELECT COUNT(mi.id) as total
             FROM master_informasi mi
             LEFT JOIN monitoring m ON m.master_id = mi.id AND m.year = ? AND m.triwulan = ?
-            WHERE (m.is_deleted = 0 OR m.is_deleted IS NULL)
-        ", [$selectedYear, $selectedTriwulan]);
+            WHERE (m.is_deleted = 0 OR m.is_deleted IS NULL) $pjFilter
+        ", $queryParams);
         $data['totalMonitoring'] = $queryTotal->row()->total;
 
         // 2. Monitoring by status for current triwulan
@@ -38,24 +45,24 @@ class Dashboard extends Auth_Controller {
             SELECT COUNT(mi.id) as total
             FROM master_informasi mi
             LEFT JOIN monitoring m ON m.master_id = mi.id AND m.year = ? AND m.triwulan = ?
-            WHERE m.status = 'completed' AND (m.is_deleted = 0 OR m.is_deleted IS NULL)
-        ", [$selectedYear, $selectedTriwulan]);
+            WHERE m.status = 'completed' AND (m.is_deleted = 0 OR m.is_deleted IS NULL) $pjFilter
+        ", $queryParams);
         $data['statusCompleted'] = $queryCompleted->row()->total;
 
         $queryProgress = $db->query("
             SELECT COUNT(mi.id) as total
             FROM master_informasi mi
             LEFT JOIN monitoring m ON m.master_id = mi.id AND m.year = ? AND m.triwulan = ?
-            WHERE m.status = 'progress' AND (m.is_deleted = 0 OR m.is_deleted IS NULL)
-        ", [$selectedYear, $selectedTriwulan]);
+            WHERE m.status = 'progress' AND (m.is_deleted = 0 OR m.is_deleted IS NULL) $pjFilter
+        ", $queryParams);
         $data['statusProgress'] = $queryProgress->row()->total;
 
         $queryPending = $db->query("
             SELECT COUNT(mi.id) as total
             FROM master_informasi mi
             LEFT JOIN monitoring m ON m.master_id = mi.id AND m.year = ? AND m.triwulan = ?
-            WHERE (m.status = 'pending' OR m.status IS NULL) AND (m.is_deleted = 0 OR m.is_deleted IS NULL)
-        ", [$selectedYear, $selectedTriwulan]);
+            WHERE (m.status = 'pending' OR m.status IS NULL) AND (m.is_deleted = 0 OR m.is_deleted IS NULL) $pjFilter
+        ", $queryParams);
         $data['statusPending'] = $queryPending->row()->total;
 
         if ($data['totalMonitoring'] > 0) {
@@ -64,16 +71,17 @@ class Dashboard extends Auth_Controller {
             $data['tingkatKepatuhan'] = 0;
         }
 
+        $pjFilterNoAlias = str_replace("m.pj", "pj", $pjFilter);
         // Fetch last update time
         $queryLastUpdate = $db->query("
             SELECT MAX(updated_at) as last_update
             FROM monitoring 
-            WHERE year = ? AND triwulan = ? AND (is_deleted = 0 OR is_deleted IS NULL)
-        ", [$selectedYear, $selectedTriwulan]);
+            WHERE year = ? AND triwulan = ? AND (is_deleted = 0 OR is_deleted IS NULL) $pjFilterNoAlias
+        ", $queryParams);
         $data['lastUpdate'] = $queryLastUpdate->row()->last_update;
 
         // 3. Category distribution (for Chart.js) showing compliance percentage
-        $query = $db->query("
+        $queryChart = $db->query("
             SELECT 
                 c.name as category_name,
                 ROUND(
@@ -86,11 +94,11 @@ class Dashboard extends Auth_Controller {
             FROM categories c 
             LEFT JOIN master_informasi mi ON c.id = mi.category_id
             LEFT JOIN monitoring m ON mi.id = m.master_id AND m.year = ? AND m.triwulan = ?
-            WHERE (m.is_deleted = 0 OR m.is_deleted IS NULL)
+            WHERE (m.is_deleted = 0 OR m.is_deleted IS NULL) $pjFilter
             GROUP BY c.id, c.name
             ORDER BY c.name ASC
-        ", [$selectedYear, $selectedTriwulan]);
-        $data['categoryChart'] = $query->result_array();
+        ", $queryParams);
+        $data['categoryChart'] = $queryChart->result_array();
 
         // 4. Pending / Progress items for the selected year and triwulan
         $queryRecentPending = $db->query("
@@ -100,10 +108,10 @@ class Dashboard extends Auth_Controller {
             LEFT JOIN categories c ON c.id = mi.category_id
             LEFT JOIN monitoring m ON m.master_id = mi.id AND m.year = ? AND m.triwulan = ?
             WHERE (m.status != 'completed' OR m.status IS NULL) 
-              AND (m.is_deleted = 0 OR m.is_deleted IS NULL)
+              AND (m.is_deleted = 0 OR m.is_deleted IS NULL) $pjFilter
             ORDER BY mi.id ASC
             LIMIT 5
-        ", [$selectedYear, $selectedTriwulan]);
+        ", $queryParams);
         $data['recentMonitoring'] = $queryRecentPending->result_array();
 
         // 5. Completed items for the selected year and triwulan
@@ -123,6 +131,8 @@ class Dashboard extends Auth_Controller {
         $data['selectedYear'] = $selectedYear;
         $data['selectedTriwulan'] = $selectedTriwulan;
         $data['title'] = 'Dashboard';
+        $data['extra_css'] = ['css/dashboard.css'];
+        $data['extra_js'] = ['js/dashboard.js'];
         $data['content_view'] = 'dashboard';
         $this->load->view('layouts/admin', $data);
     }

@@ -78,7 +78,7 @@ $db['default'] = array(
 	'hostname' => getenv('MYSQLHOST') ?: (getenv('database.default.hostname') ?: 'localhost'),
 	'username' => getenv('MYSQLUSER') ?: (getenv('database.default.username') ?: 'root'),
 	'password' => getenv('MYSQLPASSWORD') !== false ? getenv('MYSQLPASSWORD') : (getenv('database.default.password') !== false ? getenv('database.default.password') : ''),
-	'database' => getenv('MYSQL_DATABASE') ?: (getenv('MYSQLDATABASE') ?: (getenv('database.default.database') ?: 'pepadun')),
+	'database' => getenv('MYSQLDATABASE') ?: (getenv('database.default.database') ?: 'pepadun'),
     'port'     => getenv('MYSQLPORT') ?: 3306,
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

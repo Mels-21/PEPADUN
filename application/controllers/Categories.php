@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Categories extends Admin_Controller {
+class Categories extends Auth_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Category_model');
@@ -23,11 +23,18 @@ class Categories extends Admin_Controller {
         $data['searchQuery'] = $search;
         $data['categories'] = $categoryModel->orderBy('name', 'ASC')->findAll();
         $data['title'] = 'Manajemen Kategori';
+        $data['extra_css'] = ['css/categories.css'];
+        $data['extra_js'] = ['js/categories.js'];
         $data['content_view'] = 'categories/index';
         $this->load->view('layouts/admin', $data);
     }
 
     public function store() {
+        if (session()->get('role') !== 'admin') {
+            session()->setFlashdata('error', 'Akses ditolak. Hanya Admin yang dapat menambah kategori.');
+            redirect('categories');
+        }
+
         $categoryModel = $this->Category_model;
 
         $this->form_validation->set_rules('name', 'Nama', 'required|min_length[3]|max_length[100]');
@@ -48,6 +55,11 @@ class Categories extends Admin_Controller {
     }
 
     public function update($id) {
+        if (session()->get('role') !== 'admin') {
+            session()->setFlashdata('error', 'Akses ditolak. Hanya Admin yang dapat mengubah kategori.');
+            redirect('categories');
+        }
+
         $categoryModel = $this->Category_model;
 
         $this->form_validation->set_rules('name', 'Nama', 'required|min_length[3]|max_length[100]');
@@ -68,6 +80,11 @@ class Categories extends Admin_Controller {
     }
 
     public function delete($id) {
+        if (session()->get('role') !== 'admin') {
+            session()->setFlashdata('error', 'Akses ditolak. Hanya Admin yang dapat menghapus kategori.');
+            redirect('categories');
+        }
+
         $categoryModel = $this->Category_model;
 
         try {

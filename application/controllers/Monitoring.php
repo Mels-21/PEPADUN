@@ -32,6 +32,10 @@ class Monitoring extends Auth_Controller {
                     ->orWhere('monitoring.is_deleted IS NULL')
                     ->groupEnd();
 
+        if (session()->get('role') === 'karyawan') {
+            $masterModel->where('monitoring.pj', session()->get('nama'));
+        }
+
         if (!empty($searchFilter)) {
             $masterModel->groupStart()
                 ->like('master_informasi.name', $searchFilter)
@@ -109,12 +113,19 @@ class Monitoring extends Auth_Controller {
         $data['selectedStatus'] = $statusFilter;
         $data['searchQuery'] = $searchFilter;
         $data['title'] = 'Monitoring Keterbukaan Informasi Publik';
-        
+        $data['extra_css'] = ['css/monitoring.css'];
+        $data['extra_js'] = ['js/monitoring.js'];
         $data['content_view'] = 'monitoring/index';
+        
         $this->load->view('layouts/admin', $data);
     }
 
     public function create_master() {
+        if (session()->get('role') !== 'admin') {
+            session()->setFlashdata('error', 'Akses ditolak. Hanya Admin yang dapat menambah informasi global.');
+            redirect('monitoring');
+        }
+
         $categoryModel = $this->Category_model;
         $data['categories'] = $categoryModel->orderBy('name', 'ASC')->findAll();
         
@@ -127,6 +138,11 @@ class Monitoring extends Auth_Controller {
     }
 
     public function store_master() {
+        if (session()->get('role') !== 'admin') {
+            session()->setFlashdata('error', 'Akses ditolak.');
+            redirect('monitoring');
+        }
+
         $year = $this->input->post('year') !== NULL ? (int)$this->input->post('year') : (int)date('Y');
         $triwulan = $this->input->post('triwulan') !== NULL ? (int)$this->input->post('triwulan') : (int)ceil(date('m') / 3);
 
@@ -214,8 +230,8 @@ class Monitoring extends Auth_Controller {
                                       ->where('is_deleted', 0)
                                       ->first();
 
-        if ($monitoring && session()->get('role') === 'karyawan' && $monitoring['created_by'] != session()->get('id_user')) {
-            session()->setFlashdata('error', 'Akses ditolak. Laporan ini diupdate oleh user lain.');
+        if ($monitoring && session()->get('role') === 'karyawan' && $monitoring['pj'] !== session()->get('nama')) {
+            session()->setFlashdata('error', 'Akses ditolak. Anda hanya bisa mengupdate informasi yang ditugaskan kepada Anda.');
             redirect('monitoring');
         }
 
@@ -245,7 +261,7 @@ class Monitoring extends Auth_Controller {
                                       ->where('is_deleted', 0)
                                       ->first();
 
-        if ($monitoring && session()->get('role') === 'karyawan' && $monitoring['created_by'] != session()->get('id_user')) {
+        if ($monitoring && session()->get('role') === 'karyawan' && $monitoring['pj'] !== session()->get('nama')) {
             session()->setFlashdata('error', 'Akses ditolak.');
             redirect('monitoring');
         }
@@ -322,6 +338,11 @@ class Monitoring extends Auth_Controller {
     }
 
     public function delete_global($master_id, $year, $triwulan) {
+        if (session()->get('role') !== 'admin') {
+            session()->setFlashdata('error', 'Akses ditolak. Hanya Admin yang dapat menghapus informasi.');
+            redirect("monitoring?year={$year}&triwulan={$triwulan}");
+        }
+
         $masterModel = $this->Master_informasi_model;
         $masterInfo = $masterModel->find($master_id);
         
@@ -339,6 +360,11 @@ class Monitoring extends Auth_Controller {
     }
 
     public function delete($master_id, $year, $triwulan) {
+        if (session()->get('role') !== 'admin') {
+            session()->setFlashdata('error', 'Akses ditolak.');
+            redirect("monitoring?year={$year}&triwulan={$triwulan}");
+        }
+
         $masterModel = $this->Master_informasi_model;
         $masterInfo = $masterModel->find($master_id);
         
@@ -456,21 +482,32 @@ class Monitoring extends Auth_Controller {
         
         $this->load->view('monitoring/export_pdf', $data);
     }
+    
     private function _send_whatsapp($number, $message) {
-        $data = [
-            'number' => $number,
-            'message' => $message
-        ];
+        $token = "YOUR_FONNTE_TOKEN_HERE"; // Ganti dengan token Fonnte Anda
 
-        $ch = curl_init('https://eloquent-fulfillment-production-05d1.up.railway.app/send-message');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array(
+                'target' => $number,
+                'message' => $message,
+                'countryCode' => '62'
+            ),
+            CURLOPT_HTTPHEADER => array(
+                "Authorization: $token"
+            ),
+        ));
         
-        $response = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+        $response = curl_exec($curl);
+        curl_close($curl);
 
         return json_decode($response, true);
     }

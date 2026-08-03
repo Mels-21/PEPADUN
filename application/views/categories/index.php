@@ -1,24 +1,26 @@
 <!-- Header Action Card -->
-<div class="card" style="margin-bottom: 2rem; padding: 1rem 1.25rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+<div class="card header-action-card">
+    <div class="header-action-container">
         <!-- Left side: Search Filter -->
-        <form action="<?= base_url('categories') ?>" method="GET" style="margin: 0; flex: 1; max-width: 300px;">
-            <div class="input-icon-wrapper" style="width: 100%; margin-bottom: 0;">
-                <input type="text" id="search" name="search" class="form-control form-control-icon" placeholder="Cari kategori..." value="<?= isset($searchQuery) ? esc($searchQuery) : '' ?>" autocomplete="off" style="padding-top: 0.5rem; padding-bottom: 0.5rem; font-size: 0.85rem; width: 100%;" onkeypress="if(event.keyCode === 13) { this.form.submit(); return false; }">
-                <i class="bi bi-search" style="font-size: 0.95rem;"></i>
+        <form action="<?= base_url('categories') ?>" method="GET" class="header-search-form">
+            <div class="input-icon-wrapper header-search-input-wrapper">
+                <input type="text" id="search" name="search" class="form-control form-control-icon header-search-input" placeholder="Cari kategori..." value="<?= isset($searchQuery) ? esc($searchQuery) : '' ?>" autocomplete="off" onkeypress="if(event.keyCode === 13) { this.form.submit(); return false; }">
+                <i class="bi bi-search header-search-icon"></i>
             </div>
         </form>
 
         <!-- Right side: Actions -->
-        <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <div class="header-actions-container">
             <?php if (!empty($searchQuery)): ?>
-                <a href="<?= base_url('categories') ?>" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                <a href="<?= base_url('categories') ?>" class="btn btn-secondary btn-reset">
                     Reset
                 </a>
             <?php endif; ?>
-            <button type="button" class="btn btn-primary" onclick="openAddModal()" style="background-color: #0c3d79; border-color: #0c3d79; padding: 0.5rem 1.25rem; font-size: 0.85rem;">
-                <i class="bi bi-plus-lg"></i> Tambah Kategori
-            </button>
+            <?php if (session()->get('role') === 'admin'): ?>
+                <button type="button" class="btn btn-primary btn-add-data" onclick="openAddModal()">
+                    <i class="bi bi-plus-lg"></i> Tambah Kategori
+                </button>
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -28,34 +30,38 @@
     <table class="custom-table">
         <thead>
             <tr>
-                <th style="width: 10%;">No.</th>
-                <th style="width: 25%;">Nama Kategori</th>
-                <th style="width: 45%;">Deskripsi Kategori</th>
-                <th style="width: 15%; text-align: center;">Aksi</th>
+                <th class="col-no">No.</th>
+                <th class="col-name">Nama Kategori</th>
+                <th class="col-desc">Deskripsi Kategori</th>
+                <th class="col-action">Aksi</th>
             </tr>
         </thead>
         <tbody>
             <?php if (empty($categories)): ?>
                 <tr>
-                    <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 4rem 2rem;">
-                        <i class="bi bi-folder-x" style="font-size: 3rem; color: #cbd5e1; display: block; margin-bottom: 1rem;"></i>
+                    <td colspan="4" class="table-empty-state">
+                        <i class="bi bi-folder-x empty-state-icon"></i>
                         Belum ada kategori yang terdaftar.
                     </td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($categories as $index => $cat): ?>
                     <tr>
-                        <td style="font-weight: 500; color: var(--text-muted);"><?= $index + 1 ?></td>
-                        <td style="font-weight: 600; color: var(--text-dark);"><?= esc($cat['name']) ?></td>
-                        <td style="color: var(--text-muted);"><?= esc($cat['description'] ?: '-') ?></td>
-                        <td style="text-align: center; white-space: nowrap;">
-                            <div style="display: inline-flex; gap: 0.75rem; align-items: center; vertical-align: middle;">
-                                <button type="button" onclick="openEditModal(<?= esc($cat['id']) ?>, '<?= addslashes(esc($cat['name'])) ?>', '<?= addslashes(esc($cat['description'] ?: '')) ?>')" title="Edit Kategori" style="border: none; cursor: pointer; display: inline-flex; justify-content: center; align-items: center; width: 36px; height: 36px; font-size: 1.1rem; background-color: #F0F5FF; color: #2563EB; border-radius: 10px; transition: all 0.2s;">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <a href="<?= base_url('categories/delete/' . $cat['id']) ?>" title="Hapus Kategori" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori ini? Data monitoring terkait mungkin terdampak.')" style="display: inline-flex; justify-content: center; align-items: center; width: 36px; height: 36px; font-size: 1.1rem; background-color: #FFF0F0; color: #EF4444; border-radius: 10px; text-decoration: none; transition: all 0.2s;">
-                                    <i class="bi bi-trash"></i>
-                                </a>
+                        <td class="cell-index"><?= $index + 1 ?></td>
+                        <td class="cell-name"><?= esc($cat['name']) ?></td>
+                        <td class="cell-desc"><?= esc($cat['description'] ?: '-') ?></td>
+                        <td class="cell-action">
+                            <div class="action-buttons-wrapper">
+                                <?php if (session()->get('role') === 'admin'): ?>
+                                    <button type="button" onclick="openEditModal(<?= esc($cat['id']) ?>, '<?= addslashes(esc($cat['name'])) ?>', '<?= addslashes(esc($cat['description'] ?: '')) ?>')" title="Edit Kategori" class="btn-icon-edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <a href="<?= base_url('categories/delete/' . $cat['id']) ?>" title="Hapus Kategori" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori ini? Data monitoring terkait mungkin terdampak.')" class="btn-icon-delete">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                <?php else: ?>
+                                    <span class="text-readonly">Hanya Lihat</span>
+                                <?php endif; ?>
                             </div>
                         </td>
                     </tr>
@@ -75,7 +81,7 @@
         <form action="<?= base_url('categories/store') ?>" method="POST">
             <?= csrf_field() ?>
             <div class="form-group">
-                <label for="add_name">Nama Kategori <span style="color: red;">*</span></label>
+                <label for="add_name">Nama Kategori <span class="form-label-required">*</span></label>
                 <input type="text" id="add_name" name="name" class="form-control" placeholder="Masukkan nama kategori (misal: Kepegawaian)..." required autocomplete="off">
             </div>
             <div class="form-group">
@@ -100,7 +106,7 @@
         <form id="editForm" action="" method="POST">
             <?= csrf_field() ?>
             <div class="form-group">
-                <label for="edit_name">Nama Kategori <span style="color: red;">*</span></label>
+                <label for="edit_name">Nama Kategori <span class="form-label-required">*</span></label>
                 <input type="text" id="edit_name" name="name" class="form-control" required autocomplete="off">
             </div>
             <div class="form-group">
@@ -116,81 +122,5 @@
 </div>
 
 <script>
-    const addModal = document.getElementById('addModal');
-    const editModal = document.getElementById('editModal');
-    const editForm = document.getElementById('editForm');
-    const editName = document.getElementById('edit_name');
-    const editDesc = document.getElementById('edit_description');
-
-    function openAddModal() {
-        addModal.classList.add('show');
-    }
-
-    function closeAddModal() {
-        addModal.classList.remove('show');
-    }
-
-    function openEditModal(id, name, description) {
-        editForm.action = `<?= base_url('categories/update') ?>/${id}`;
-        editName.value = name;
-        editDesc.value = description;
-        editModal.classList.add('show');
-    }
-
-    function closeEditModal() {
-        editModal.classList.remove('show');
-    }
-
-    // Close modal on click outside
-    window.onclick = function(event) {
-        if (event.target === addModal) {
-            closeAddModal();
-        }
-        if (event.target === editModal) {
-            closeEditModal();
-        }
-    }
-
-    // Live Search Debounce logic matching monitoring
-    let debounceTimer;
-    const searchInput = document.getElementById('search');
-
-    window.addEventListener('DOMContentLoaded', (event) => {
-        // Restore focus if coming from a search reload
-        if (sessionStorage.getItem('searchFocus') === '1' && searchInput) {
-            searchInput.focus();
-            const val = searchInput.value;
-            searchInput.value = '';
-            searchInput.value = val;
-            sessionStorage.removeItem('searchFocus');
-        } else if (searchInput && searchInput.value !== '') {
-            searchInput.focus();
-            const val = searchInput.value;
-            searchInput.value = '';
-            searchInput.value = val;
-        }
-
-        if (searchInput) {
-            searchInput.addEventListener('input', function() {
-                clearTimeout(debounceTimer);
-                
-                if (this.value === '') {
-                    sessionStorage.setItem('searchFocus', '1');
-                    this.form.submit();
-                    return;
-                }
-                
-                debounceTimer = setTimeout(() => {
-                    sessionStorage.setItem('searchFocus', '1');
-                    this.form.submit();
-                }, 600);
-            });
-            
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    sessionStorage.setItem('searchFocus', '1');
-                }
-            });
-        }
-    });
+    const URL_CATEGORY_UPDATE = '<?= base_url('categories/update') ?>';
 </script>

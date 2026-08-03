@@ -16,6 +16,11 @@
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?= base_url('css/style.css') ?>">
+    <?php if (isset($extra_css)): ?>
+        <?php foreach ($extra_css as $css): ?>
+            <link rel="stylesheet" href="<?= base_url($css) ?>">
+        <?php endforeach; ?>
+    <?php endif; ?>
 </head>
 <body>
     <script>
@@ -75,5 +80,12 @@
 
         </div>
     </div>
+    
+    <script src="<?= base_url('js/sidebar.js') ?>?v=<?= time() ?>"></script>
+    <?php if (isset($extra_js)): ?>
+        <?php foreach ($extra_js as $js): ?>
+            <script src="<?= base_url($js) ?>?v=<?= time() ?>"></script>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </body>
 </html>

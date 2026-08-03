@@ -141,15 +141,18 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
     <!-- CARD 4 -->
     <div class="col-lg-3 col-md-6">
         <div class="wf-card stat-card">
-            <div class="stat-top h-100 d-flex align-items-center justify-content-center">
+            <div class="d-flex align-items-center">
                 <div class="stat-icon stat-icon-folder">
                     <i class="bi bi-folder2-open"></i>
                 </div>
                 <div class="ms-3">
-                    <div class="stat-title" style="font-size: 20px;">Total Item</div>
+                    <div class="stat-title">Total Item</div>
                     <div class="stat-value" id="val-total3"><?= $total_item ?></div>
-                    <div class="stat-subtitle" style="font-size: 15px;">Item Informasi</div>
+                    <div class="stat-subtitle">Item Informasi</div>
                 </div>
+            </div>
+            <div class="wf-progress mt-3 stat-progress-bg-gray">
+                <div class="wf-progress-bar bg-ds-primary" style="width:100%;"></div>
             </div>
         </div>
     </div>
@@ -164,17 +167,17 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
 
     <!-- CHART -->
     <div class="col-lg-12">
-        <div class="wf-card dashboard-card" style="padding: 1.75rem;">
-            <div class="card-header-custom d-flex justify-content-between align-items-center mb-4" style="padding-bottom: 1rem; border-bottom: 1px dashed var(--neutral-light, #E2E8F0);">
-                <div class="d-flex align-items-center gap-2 text-ds-primary" style="color: var(--primary, #0A4D9E);">
-                    <i class="bi bi-bar-chart-fill" style="font-size: 1.25rem;"></i>
-                    <h3 class="mb-0 fw-bold" style="font-size: 1.1rem; margin: 0;">
+        <div class="wf-card dashboard-card landing-card-padded">
+            <div class="card-header-custom landing-card-header-flex landing-card-header">
+                <div class="d-flex align-items-center gap-2 text-ds-primary">
+                    <i class="bi bi-bar-chart-fill landing-icon-lg"></i>
+                    <h3 class="mb-0 fw-bold landing-title-h3">
                         Presentase Kepatuhan Per Kategori
                     </h3>
                 </div>
             </div>
-            <div class="chart-scroll" style="position: relative; height: 320px; width: 100%; overflow-x: auto;">
-                <div class="chart-wrapper" style="min-width: 600px; height: 100%;">
+            <div class="chart-scroll landing-chart-scroll">
+                <div class="chart-wrapper landing-chart-wrapper">
                     <canvas id="kepatuhanChart"></canvas>
                     <script>
                         window.kepatuhanChartData = <?= $chartData ?? '[]' ?>;
@@ -186,27 +189,27 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
 
     <!-- ITEM BELUM UPDATE -->
     <div class="col-lg-12" id="monitoring-data">
-        <div class="wf-card dashboard-card" style="padding: 1.75rem; height: auto;">
+        <div class="wf-card dashboard-card landing-card-padded h-auto">
             <div class="card-header-custom d-flex justify-content-between align-items-center mb-4">
-                <div class="d-flex align-items-center gap-2 text-ds-primary" style="color: var(--primary, #0A4D9E);">
-                    <i class="bi bi-list-columns-reverse" style="font-size: 1.25rem;"></i>
-                    <h3 class="mb-0 fw-bold" style="font-size: 1.1rem; margin: 0;">
+                <div class="d-flex align-items-center gap-2 text-ds-primary">
+                    <i class="bi bi-list-columns-reverse landing-icon-lg"></i>
+                    <h3 class="mb-0 fw-bold landing-title-h3">
                         Data Monitoring Informasi Publik
                     </h3>
                 </div>
             </div>
 
             <!-- Filtering and Search Bar -->
-            <div style="margin-bottom: 2rem;">
+            <div class="mb-4">
                 <form action="<?= base_url('landing') ?>" method="GET">
-                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-                        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-                            <div class="input-icon-wrapper" style="width: 200px; margin-bottom: 0; position: relative;">
-                                <input type="text" id="search" name="search" class="form-control form-control-icon" placeholder="Cari informasi..." value="<?= esc($searchQuery ?? '') ?>" autocomplete="off" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 2.25rem; font-size: 0.85rem;" onkeypress="if(event.keyCode === 13) { event.preventDefault(); submitFilters(); return false; }">
-                                <i class="bi bi-search" style="font-size: 0.95rem; position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #64748b;"></i>
+                    <div class="landing-toolbar">
+                        <div class="landing-toolbar-group">
+                            <div class="input-icon-wrapper landing-search-wrapper">
+                                <input type="text" id="search" name="search" class="form-control form-control-icon landing-search-input" placeholder="Cari informasi..." value="<?= esc($searchQuery ?? '') ?>" autocomplete="off" onkeypress="if(event.keyCode === 13) { event.preventDefault(); submitFilters(); return false; }">
+                                <i class="bi bi-search landing-search-icon"></i>
                             </div>
 
-                            <select id="category" name="category" class="select-control form-select" onchange="submitFilters()" style="width: 170px; padding: 0.5rem 2.25rem 0.5rem 0.75rem; font-size: 0.85rem;">
+                            <select id="category" name="category" class="select-control form-select landing-filter-select" onchange="submitFilters()">
                                 <option value="">Semua Kategori</option>
                                 <?php foreach ($categories as $cat): 
                                     if (strtolower(trim($cat['name'])) === 'tanpa kategori') continue;
@@ -217,14 +220,14 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
                                 <?php endforeach; ?>
                             </select>
 
-                            <select id="status" name="status" class="select-control form-select" onchange="submitFilters()" style="width: 170px; padding: 0.5rem 2.25rem 0.5rem 0.75rem; font-size: 0.85rem;">
+                            <select id="status" name="status" class="select-control form-select landing-filter-select" onchange="submitFilters()">
                                 <option value="">Semua Status</option>
                                 <option value="pending" <?= ($selectedStatus == 'pending') ? 'selected' : '' ?>>Belum Update</option>
                                 <option value="progress" <?= ($selectedStatus == 'progress') ? 'selected' : '' ?>>Dalam Proses</option>
                                 <option value="completed" <?= ($selectedStatus == 'completed') ? 'selected' : '' ?>>Selesai (Completed)</option>
                             </select>
                             
-                            <a href="<?= base_url('landing') ?>#monitoring-data" id="resetFilterBtn" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem; background-color: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; <?= (!empty($searchQuery) || !empty($selectedCategory) || !empty($selectedStatus)) ? '' : 'display: none;' ?>">
+                            <a href="<?= base_url('landing') ?>#monitoring-data" id="resetFilterBtn" class="btn btn-secondary landing-btn-reset" style="<?= (!empty($searchQuery) || !empty($selectedCategory) || !empty($selectedStatus)) ? '' : 'display: none;' ?>">
                                 Reset Filter
                             </a>
                         </div>
@@ -233,60 +236,61 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
             </div>
 
             <!-- Table Panel -->
-            <div class="table-responsive" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
-                <table class="table custom-table table-hover" style="min-width: 1000px; margin-bottom: 0;">
-                    <thead style="position: sticky; top: 0; background: white; z-index: 1;">
+            <!-- Table Panel -->
+            <div class="table-responsive landing-table-responsive">
+                <table class="table custom-table table-hover landing-table">
+                    <thead class="landing-table-thead">
                         <tr>
-                            <th style="width: 5%; color: var(--text-muted, #64748B); font-weight: 500; font-size: 0.85rem; border-bottom: 1px solid var(--neutral-light, #E2E8F0); padding: 1rem;">No.</th>
-                            <th style="width: 25%; color: var(--text-muted, #64748B); font-weight: 500; font-size: 0.85rem; border-bottom: 1px solid var(--neutral-light, #E2E8F0); padding: 1rem;">Nama Informasi</th>
-                            <th style="width: 12%; color: var(--text-muted, #64748B); font-weight: 500; font-size: 0.85rem; border-bottom: 1px solid var(--neutral-light, #E2E8F0); padding: 1rem;">Kategori</th>
-                            <th style="width: 12%; color: var(--text-muted, #64748B); font-weight: 500; font-size: 0.85rem; border-bottom: 1px solid var(--neutral-light, #E2E8F0); padding: 1rem;">PJ</th>
-                            <th style="width: 10%; color: var(--text-muted, #64748B); font-weight: 500; font-size: 0.85rem; border-bottom: 1px solid var(--neutral-light, #E2E8F0); padding: 1rem;">Timeline</th>
-                            <th style="width: 13%; color: var(--text-muted, #64748B); font-weight: 500; font-size: 0.85rem; border-bottom: 1px solid var(--neutral-light, #E2E8F0); padding: 1rem;">Status</th>
-                            <th style="width: 15%; color: var(--text-muted, #64748B); font-weight: 500; font-size: 0.85rem; border-bottom: 1px solid var(--neutral-light, #E2E8F0); padding: 1rem;">Keterangan</th>
-                            <th style="width: 8%; color: var(--text-muted, #64748B); font-weight: 500; font-size: 0.85rem; border-bottom: 1px solid var(--neutral-light, #E2E8F0); padding: 1rem; text-align: center;">Tautan</th>
+                            <th class="landing-th" style="width: 5%;">No.</th>
+                            <th class="landing-th" style="width: 25%;">Nama Informasi</th>
+                            <th class="landing-th" style="width: 12%;">Kategori</th>
+                            <th class="landing-th" style="width: 12%;">PJ</th>
+                            <th class="landing-th" style="width: 10%;">Timeline</th>
+                            <th class="landing-th" style="width: 13%;">Status</th>
+                            <th class="landing-th" style="width: 15%;">Keterangan</th>
+                            <th class="landing-th text-center" style="width: 8%;">Tautan</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (empty($monitoringList)): ?>
                             <tr>
-                                <td colspan="8" style="text-align: center; color: var(--text-muted, #64748B); padding: 3rem;">
+                                <td colspan="8" class="landing-td-empty">
                                     Belum ada data monitoring keterbukaan informasi.
                                 </td>
                             </tr>
                         <?php else: ?>
                             <?php foreach ($monitoringList as $index => $item): ?>
                                 <tr>
-                                    <td style="padding: 1rem;"><?= $index + 1 + (($currentPage - 1) * $perPage) ?></td>
-                                    <td style="padding: 1rem; font-weight: 600; color: var(--text-dark, #1E293B);"><?= esc($item['custom_name'] ?: $item['name']) ?></td>
-                                    <td style="padding: 1rem; color: var(--text-muted, #64748B); font-size: 0.9rem;"><?= esc(empty($item['category_name']) || strtolower(trim($item['category_name'])) === 'tanpa kategori' || strtolower(trim($item['category_name'])) === 'lainnya' ? '-' : $item['category_name']) ?></td>
-                                    <td style="padding: 1rem; font-weight: 500; color: var(--text-muted, #64748B); font-size: 0.9rem;"><?= esc($item['pj'] ?: '-') ?></td>
-                                    <td style="padding: 1rem; color: var(--text-dark, #1E293B); font-size: 0.85rem; font-weight: 500;">
+                                    <td class="landing-td"><?= $index + 1 + (($currentPage - 1) * $perPage) ?></td>
+                                    <td class="landing-td-title"><?= esc($item['custom_name'] ?: $item['name']) ?></td>
+                                    <td class="landing-td-muted"><?= esc(empty($item['category_name']) || strtolower(trim($item['category_name'])) === 'tanpa kategori' || strtolower(trim($item['category_name'])) === 'lainnya' ? '-' : $item['category_name']) ?></td>
+                                    <td class="landing-td-muted fw-medium"><?= esc($item['pj'] ?: '-') ?></td>
+                                    <td class="landing-td-sm">
                                         <?= esc($item['timeline'] ?: '-') ?>
                                     </td>
-                                    <td style="padding: 1rem;">
+                                    <td class="landing-td">
                                         <?php if ($item['status'] === 'completed'): ?>
-                                            <span class="badge badge-selesai" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; background-color: #ECFDF5; color: #10B981; border: 1px solid #D1FAE5;">
+                                            <span class="badge landing-badge landing-badge-success">
                                                 <i class="bi bi-check-circle-fill"></i> Selesai
                                             </span>
                                         <?php elseif ($item['status'] === 'progress'): ?>
-                                            <span class="badge badge-proses" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; background-color: #FFFBEB; color: #F59E0B; border: 1px solid #FEF3C7;">
+                                            <span class="badge landing-badge landing-badge-warning">
                                                 <i class="bi bi-clock-fill"></i> Dalam Proses
                                             </span>
                                         <?php else: ?>
-                                            <span class="badge badge-belum-update" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem; background-color: #FEF2F2; color: #EF4444; border: 1px solid #FEE2E2;">
+                                            <span class="badge landing-badge landing-badge-danger">
                                                 <i class="bi bi-exclamation-circle-fill"></i> Belum Update
                                             </span>
                                         <?php endif; ?>
                                     </td>
-                                    <td style="padding: 1rem; color: var(--text-muted, #64748B); font-size: 0.85rem;"><?= esc($item['description'] ?: '-') ?></td>
-                                    <td style="padding: 1rem; text-align: center;">
+                                    <td class="landing-td-desc"><?= esc($item['description'] ?: '-') ?></td>
+                                    <td class="landing-td text-center">
                                         <?php if (!empty($item['tautan'])): ?>
-                                            <a href="<?= esc($item['tautan']) ?>" target="_blank" class="btn-tertiary" title="<?= esc($item['tautan']) ?>" style="padding: 0; font-size: 1.15rem; color: var(--primary, #0A4D9E);">
+                                            <a href="<?= esc($item['tautan']) ?>" target="_blank" class="btn-tertiary landing-link-btn" title="<?= esc($item['tautan']) ?>">
                                                 <i class="bi bi-link-45deg"></i>
                                             </a>
                                         <?php else: ?>
-                                            <span style="color: var(--text-muted, #64748B); font-size: 0.8rem;">-</span>
+                                            <span class="text-muted" style="font-size: 0.8rem;">-</span>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
@@ -310,16 +314,16 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
                         return base_url('landing') . '?' . http_build_query($params) . '#monitoring-data';
                     };
                 ?>
-            <div class="pagination-wrapper mt-4" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--neutral-light, #E2E8F0);">
-                <div style="color: var(--text-muted, #64748B); font-size: 0.85rem; font-weight: 500;">
+            <div class="pagination-wrapper mt-4 landing-pagination-wrapper">
+                <div class="landing-pagination-info">
                     Menampilkan <?= $startItem ?> - <?= $endItem ?> dari <?= $totalRows ?> data
                 </div>
                 
-                <div class="pagination-pages" style="display: flex; gap: 0.25rem;">
-                    <a href="<?= $build_page_url(1) ?>" class="pagination-page-btn btn btn-sm btn-outline-secondary" title="First Page" <?= $currentPage <= 1 ? 'style="pointer-events:none; opacity:0.5;"' : '' ?>>
+                <div class="pagination-pages landing-pagination-pages">
+                    <a href="<?= $build_page_url(1) ?>" class="pagination-page-btn btn btn-sm btn-outline-secondary" title="First Page" <?= $currentPage <= 1 ? 'class="landing-pagination-disabled"' : '' ?>>
                         <i class="bi bi-chevron-double-left"></i>
                     </a>
-                    <a href="<?= $build_page_url(max(1, $currentPage - 1)) ?>" class="pagination-page-btn btn btn-sm btn-outline-secondary" title="Previous Page" <?= $currentPage <= 1 ? 'style="pointer-events:none; opacity:0.5;"' : '' ?>>
+                    <a href="<?= $build_page_url(max(1, $currentPage - 1)) ?>" class="pagination-page-btn btn btn-sm btn-outline-secondary" title="Previous Page" <?= $currentPage <= 1 ? 'class="landing-pagination-disabled"' : '' ?>>
                         <i class="bi bi-chevron-left"></i>
                     </a>
                     
@@ -327,28 +331,28 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
                         $startPage = max(1, $currentPage - 2);
                         $endPage = min($totalPages, $currentPage + 2);
                         if ($startPage > 1) {
-                            echo '<button class="pagination-page-btn btn btn-sm btn-outline-secondary d-none d-sm-inline-block" disabled style="cursor: default; border-color: transparent;">...</button>';
+                            echo '<button class="pagination-page-btn btn btn-sm btn-outline-secondary d-none d-sm-inline-block landing-pagination-ellipsis" disabled>...</button>';
                         }
                         for ($p = $startPage; $p <= $endPage; $p++) {
                             $activeClass = $p === $currentPage ? 'active btn-primary' : 'btn-outline-secondary d-none d-sm-inline-block';
-                            $activeStyle = $p === $currentPage ? 'background-color: var(--primary, #0A4D9E); color: white; border-color: var(--primary, #0A4D9E);' : '';
-                            echo '<a href="'.$build_page_url($p).'" class="pagination-page-btn btn btn-sm '.$activeClass.'" style="text-decoration:none; '.$activeStyle.'">'.$p.'</a>';
+                            $activeClassStyle = $p === $currentPage ? 'bg-ds-primary text-white border-primary' : '';
+                            echo '<a href="'.$build_page_url($p).'" class="pagination-page-btn btn btn-sm '.$activeClass.' landing-pagination-link '.$activeClassStyle.'">'.$p.'</a>';
                         }
                         if ($endPage < $totalPages) {
-                            echo '<button class="pagination-page-btn btn btn-sm btn-outline-secondary d-none d-sm-inline-block" disabled style="cursor: default; border-color: transparent;">...</button>';
+                            echo '<button class="pagination-page-btn btn btn-sm btn-outline-secondary d-none d-sm-inline-block landing-pagination-ellipsis" disabled>...</button>';
                         }
                     ?>
                     
-                    <a href="<?= $build_page_url(min($totalPages, $currentPage + 1)) ?>" class="pagination-page-btn btn btn-sm btn-outline-secondary" title="Next Page" <?= $currentPage >= $totalPages ? 'style="pointer-events:none; opacity:0.5;"' : '' ?>>
+                    <a href="<?= $build_page_url(min($totalPages, $currentPage + 1)) ?>" class="pagination-page-btn btn btn-sm btn-outline-secondary" title="Next Page" <?= $currentPage >= $totalPages ? 'class="landing-pagination-disabled"' : '' ?>>
                         <i class="bi bi-chevron-right"></i>
                     </a>
-                    <a href="<?= $build_page_url($totalPages) ?>" class="pagination-page-btn btn btn-sm btn-outline-secondary" title="Last Page" <?= $currentPage >= $totalPages ? 'style="pointer-events:none; opacity:0.5;"' : '' ?>>
+                    <a href="<?= $build_page_url($totalPages) ?>" class="pagination-page-btn btn btn-sm btn-outline-secondary" title="Last Page" <?= $currentPage >= $totalPages ? 'class="landing-pagination-disabled"' : '' ?>>
                         <i class="bi bi-chevron-double-right"></i>
                     </a>
                 </div>
                 
                 <div>
-                    <select class="select-control form-select" id="perPageSelect" style="padding: 0.35rem 2rem 0.35rem 0.75rem; min-width: 130px; font-size: 0.8rem; border-radius: 6px; border: 1px solid #cbd5e1;" onchange="
+                    <select class="select-control form-select landing-per-page-select" id="perPageSelect" onchange="
                         const urlParams = new URLSearchParams(window.location.search);
                         urlParams.set('per_page', this.value);
                         urlParams.set('page', '1');
@@ -512,7 +516,7 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
                 </div>
                 <div class="col-md-5 text-center position-relative">
                     <div class="info-icon-fallback py-3">
-                        <i class="bi bi-clipboard-check" style="font-size: 120px; color: #155bb5;"></i>
+                        <i class="bi bi-clipboard-check info-icon-fallback-icon"></i>
                     </div>
                 </div>
             </div>
@@ -640,12 +644,12 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
         <!-- Apa itu PEPADUN? -->
         <div class="row mt-5 pt-4 align-items-center">
             <div class="col-md-4 text-center mb-4 mb-md-0">
-                <img src="<?= base_url('images/logo_pepadun.png'); ?>" alt="Logo PEPADUN" class="tentang-logo-img mb-2" style="max-height: 120px; object-fit: contain;">
+                <img src="<?= base_url('images/logo_pepadun.png'); ?>" alt="Logo PEPADUN" class="tentang-logo-img mb-2 tentang-logo-custom">
             </div>
             <div class="col-md-8 pl-md-5">
-                <div class="ps-md-4 border-start border-2 border-primary-subtle" style="border-left-color: #0d47a1 !important; border-left-width: 3px !important;">
-                    <h3 class="fw-bold mb-3" style="color: #0d47a1;">Apa itu PEPADUN?</h3>
-                    <p class="text-secondary" style="font-size: 15px; line-height: 1.8;">
+                <div class="ps-md-4 border-start border-2 border-primary-subtle tentang-border-left">
+                    <h3 class="fw-bold mb-3 tentang-title-custom">Apa itu PEPADUN?</h3>
+                    <p class="text-secondary tentang-desc-custom">
                         PEPADUN merupakan sistem informasi yang dikembangkan oleh BBPOM di Bandar Lampung
                         untuk melakukan monitoring dan evaluasi keterbukaan informasi publik pada setiap bidang
                         secara berkala setiap triwulan.
@@ -659,10 +663,10 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
             <div class="col-md-4">
                 <div class="tentang-card h-100">
                     <div class="d-flex align-items-center mb-4">
-                        <div class="tentang-icon-circle text-primary" style="background-color: #e8f0fe;">
+                        <div class="tentang-icon-circle text-primary tentang-icon-bg-primary">
                             <i class="bi bi-bullseye"></i>
                         </div>
-                        <h5 class="fw-bold ms-3 mb-0" style="color: #0d47a1; font-size: 1.1rem;">Tujuan</h5>
+                        <h5 class="fw-bold ms-3 mb-0 tentang-icon-title">Tujuan</h5>
                     </div>
                     <ul class="tentang-list">
                         <li>Meningkatkan transparansi dan akuntabilitas pengelolaan informasi publik.</li>
@@ -674,10 +678,10 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
             <div class="col-md-4">
                 <div class="tentang-card h-100">
                     <div class="d-flex align-items-center mb-4">
-                        <div class="tentang-icon-circle text-success" style="background-color: #e6f4ea;">
+                        <div class="tentang-icon-circle text-success tentang-icon-bg-success">
                             <i class="bi bi-people-fill"></i>
                         </div>
-                        <h5 class="fw-bold ms-3 mb-0" style="color: #0d47a1; font-size: 1.1rem;">Manfaat</h5>
+                        <h5 class="fw-bold ms-3 mb-0 tentang-icon-title">Manfaat</h5>
                     </div>
                     <ul class="tentang-list">
                         <li>Memudahkan Tim MONEV dalam melakukan pemantauan.</li>
@@ -689,10 +693,10 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
             <div class="col-md-4">
                 <div class="tentang-card h-100">
                     <div class="d-flex align-items-center mb-4">
-                        <div class="tentang-icon-circle" style="color: #6f42c1; background-color: #f3e8ff;">
+                        <div class="tentang-icon-circle tentang-icon-color-purple">
                             <i class="bi bi-person"></i>
                         </div>
-                        <h5 class="fw-bold ms-3 mb-0" style="color: #0d47a1; font-size: 1.1rem;">Pengguna Sistem</h5>
+                        <h5 class="fw-bold ms-3 mb-0 tentang-icon-title">Pengguna Sistem</h5>
                     </div>
                     <ul class="tentang-list">
                         <li>Tim Monitoring dan Evaluasi (MONEV)</li>
@@ -706,15 +710,15 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
 
         <!-- Fitur Utama -->
         <div class="mt-5 pt-5 mb-5">
-            <h3 class="fw-bold mb-4 pb-2" style="color: #0d47a1;">Fitur Utama</h3>
+            <h3 class="fw-bold mb-4 pb-2 tentang-title-custom">Fitur Utama</h3>
             <div class="row g-4">
                 <div class="col-md-3">
                     <div class="d-flex flex-column align-items-center text-center">
                         <div class="fitur-icon mb-3 shadow-sm">
                             <i class="bi bi-bar-chart-line-fill"></i>
                         </div>
-                        <h6 class="fw-bold mb-2" style="color: #000000">Dashboard Monitoring</h6>
-                        <p class="text-secondary mb-0" style="font-size: 12.5px; line-height: 1.5;">Menampilkan ringkasan kepatuhan informasi secara visual.</p>
+                        <h6 class="fw-bold mb-2 fitur-title-custom">Dashboard Monitoring</h6>
+                        <p class="text-secondary mb-0 fitur-desc-custom">Menampilkan ringkasan kepatuhan informasi secara visual.</p>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -722,8 +726,8 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
                         <div class="fitur-icon mb-3 shadow-sm">
                             <i class="bi bi-file-earmark-check"></i>
                         </div>
-                        <h6 class="fw-bold mb-2" style="color: #000000">Monitoring & Update</h6>
-                        <p class="text-secondary mb-0" style="font-size: 12.5px; line-height: 1.5;">Melakukan update dan monitoring dokumen informasi setiap bidang.</p>
+                        <h6 class="fw-bold mb-2 fitur-title-custom">Monitoring & Update</h6>
+                        <p class="text-secondary mb-0 fitur-desc-custom">Melakukan update dan monitoring dokumen informasi setiap bidang.</p>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -731,8 +735,8 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
                         <div class="fitur-icon mb-3 shadow-sm">
                             <i class="bi bi-download"></i>
                         </div>
-                        <h6 class="fw-bold mb-2" style="color: #000000">Export Laporan</h6>
-                        <p class="text-secondary mb-0" style="font-size: 12.5px; line-height: 1.5;">Menyediakan export laporan dalam format PDF dan Excel.</p>
+                        <h6 class="fw-bold mb-2 fitur-title-custom">Export Laporan</h6>
+                        <p class="text-secondary mb-0 fitur-desc-custom">Menyediakan export laporan dalam format PDF dan Excel.</p>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -740,8 +744,8 @@ $persen_belum   = $total_item > 0 ? ($belum_update/$total_item)*100 : 0;
                         <div class="fitur-icon mb-3 shadow-sm">
                             <i class="bi bi-bell"></i>
                         </div>
-                        <h6 class="fw-bold mb-2" style="color: #000000">Notifikasi</h6>
-                        <p class="text-secondary mb-0" style="font-size: 12.5px; line-height: 1.5;">Pengingat dan informasi terkait jadwal monitoring.</p>
+                        <h6 class="fw-bold mb-2 fitur-title-custom">Notifikasi</h6>
+                        <p class="text-secondary mb-0 fitur-desc-custom">Pengingat dan informasi terkait jadwal monitoring.</p>
                     </div>
                 </div>
             </div>
