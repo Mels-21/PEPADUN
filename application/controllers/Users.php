@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Users extends Admin_Controller {
+class Users extends Auth_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('User_model');
@@ -24,12 +24,19 @@ class Users extends Admin_Controller {
         
         $data['searchQuery'] = $search;
         $data['users'] = $userModel->orderBy('nama', 'ASC')->findAll();
-        $data['title'] = 'Manajemen Data Karyawan';
+        $data['title'] = 'Manajemen Pengguna';
+        $data['extra_css'] = ['css/users.css'];
+        $data['extra_js'] = ['js/users.js'];
         $data['content_view'] = 'users/index';
         $this->load->view('layouts/admin', $data);
     }
 
     public function store() {
+        if (session()->get('role') !== 'admin') {
+            session()->setFlashdata('error', 'Akses ditolak. Hanya Admin yang dapat menambah pengguna.');
+            redirect('users');
+        }
+
         $userModel = $this->User_model;
 
         $this->form_validation->set_rules('username', 'Username', 'required|min_length[3]|max_length[50]|is_unique[users.username]');
@@ -72,6 +79,11 @@ class Users extends Admin_Controller {
     }
 
     public function update($id) {
+        if (session()->get('role') !== 'admin') {
+            session()->setFlashdata('error', 'Akses ditolak. Hanya Admin yang dapat mengubah data pengguna.');
+            redirect('users');
+        }
+
         $userModel = $this->User_model;
 
         $this->form_validation->set_rules('username', 'Username', 'required|min_length[3]|max_length[50]');
@@ -150,7 +162,6 @@ class Users extends Admin_Controller {
                 'username' => $data['username'],
                 'nama' => $data['nama'],
                 'role'     => $data['role'],
-                'image_user' => $data['image_user'] ?? session()->get('image_user'),
             ]);
         }
 

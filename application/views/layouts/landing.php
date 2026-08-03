@@ -104,13 +104,13 @@
                 
                 <!-- Col 1: Logo -->
                 <div class="col-lg-2 col-md-3 text-center text-lg-start">
-                    <img src="<?= base_url('images/logo_text.png') ?>" alt="Logo BBPOM" class="img-fluid" style="max-height: 95px;">
+                    <img src="<?= base_url('images/logo_text.png') ?>" alt="Logo BBPOM" class="img-fluid footer-logo">
                 </div>
                 
                 <!-- Col 2: Text PEPADUN -->
                 <div class="col-lg-4 col-md-9 mb-4 mb-lg-0">
-                    <h4 class="mb-2" style="color: white; font-weight: 700; font-size: 24px;">PEPADUN</h4>
-                    <div style="opacity: 0.9; font-size: 13px; line-height: 1.7;">
+                    <h4 class="mb-2 footer-title">PEPADUN</h4>
+                    <div class="footer-desc">
                         Percepatan Pantau Dokumen serta<br>
                         Update Data dan Informasi<br>
                         BBPOM di Bandar Lampung
@@ -119,8 +119,8 @@
                 
                 <!-- Col 3: Tautan -->
                 <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
-                    <h5 class="mb-3" style="color: white; font-weight: 600; font-size: 18px;">Tautan</h5>
-                    <ul class="list-unstyled" style="font-size: 13px; opacity: 0.9;">
+                    <h5 class="mb-3 footer-heading">Tautan</h5>
+                    <ul class="list-unstyled footer-list">
                         <li class="mb-3"><a href="#beranda" class="text-decoration-none text-ds-white footer-link">Beranda</a></li>
                         <li class="mb-3"><a href="#tentang" class="text-decoration-none text-ds-white footer-link">Tentang PEPADUN</a></li>
                         <li class="mb-3"><a href="#informasi" class="text-decoration-none text-ds-white footer-link">Informasi Publik</a></li>
@@ -130,18 +130,18 @@
                 
                 <!-- Col 4: Kontak Kami -->
                 <div class="col-lg-4 col-md-6">
-                    <h5 class="mb-3" style="color: white; font-weight: 600; font-size: 18px;">Kontak Kami</h5>
-                    <ul class="list-unstyled" style="font-size: 13px; opacity: 0.9;">
+                    <h5 class="mb-3 footer-heading">Kontak Kami</h5>
+                    <ul class="list-unstyled footer-list">
                         <li class="mb-3 d-flex align-items-start">
-                            <i class="bi bi-geo-alt me-3 mt-1" style="font-size: 16px;"></i> 
+                            <i class="bi bi-geo-alt me-3 mt-1 footer-icon"></i> 
                             <span>Jl. Dr. Susilo No. 12, Bandar Lampung, 35124</span>
                         </li>
                         <li class="mb-3 d-flex align-items-center">
-                            <i class="bi bi-telephone me-3" style="font-size: 16px;"></i> 
+                            <i class="bi bi-telephone me-3 footer-icon"></i> 
                             <span>(0721) 778852</span>
                         </li>
                         <li class="mb-3 d-flex align-items-center">
-                            <i class="bi bi-envelope me-3" style="font-size: 16px;"></i> 
+                            <i class="bi bi-envelope me-3 footer-icon"></i> 
                             <span>bbpom_lampung@pom.go.id</span>
                         </li>
                     </ul>
@@ -149,7 +149,7 @@
 
             </div>
             
-            <div class="text-center mt-5" style="font-size: 13px; opacity: 0.8;">
+            <div class="text-center mt-5 footer-copyright">
                 <i class="bi bi-c-circle"></i> <?= date('Y') ?> BBPOM di Bandar Lampung, All right reserved.
             </div>
         </div>

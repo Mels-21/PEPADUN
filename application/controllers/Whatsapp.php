@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Cron extends CI_Controller {
+class Whatsapp extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -16,7 +16,7 @@ class Cron extends CI_Controller {
     }
 
     public function check_deadline() {
-        // 1. Ambil semua data monitoring yang belum selesai (pending / progress)
+        // Ambil semua data monitoring yang belum selesai (pending / progress)
         $this->db->select('monitoring.*, master_informasi.name as master_name, master_informasi.timeline');
         $this->db->from('monitoring');
         $this->db->join('master_informasi', 'master_informasi.id = monitoring.master_id', 'left');
@@ -33,12 +33,12 @@ class Cron extends CI_Controller {
                 continue;
             }
 
-            // 2. Cari data karyawan berdasarkan nama PJ
+            // Cari data karyawan berdasarkan nama PJ
             $this->db->like('nama', $task['pj']);
             $user = $this->db->get('users')->row_array();
 
             if ($user && !empty($user['telp'])) {
-                // 3. Logika Pengecekan Tanggal H-1 berdasarkan Timeline
+                // Logika Pengecekan Tanggal H-1 berdasarkan Timeline
                 $timeline = strtolower($task['timeline']);
                 $shouldNotify = false;
                 $peringatan = "DEADLINE TINGGAL 1 HARI LAGI";
@@ -101,7 +101,7 @@ class Cron extends CI_Controller {
                     $message .= "Status Saat Ini: *" . $status_indo . "*\n\n";
                     $message .= "Mohon segera diselesaikan atau diupdate statusnya menjadi Selesai. Terima kasih.";
 
-                    // 4. Kirim Notifikasi via WhatsApp Local API
+                    // Kirim Notifikasi via WhatsApp Local API
                     $this->_sendWhatsApp($user['telp'], $message);
                     $messagesSent++;
                 }
@@ -112,23 +112,37 @@ class Cron extends CI_Controller {
     }
 
     private function _sendWhatsApp($phone, $message) {
-        $data = [
-            'number' => $phone,
-            'message' => $message
-        ];
+        $token = "YOUR_FONNTE_TOKEN_HERE"; // Ganti dengan token Fonnte Anda
 
-        $ch = curl_init('https://eloquent-fulfillment-production-05d1.up.railway.app/send-message');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array(
+                'target' => $phone,
+                'message' => $message,
+                'countryCode' => '62'
+            ),
+            CURLOPT_HTTPHEADER => array(
+                "Authorization: $token"
+            ),
+        ));
         
-        $response = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $err = curl_error($ch);
-        curl_close($ch);
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
         
-        log_message('info', "Respon WA Local API ke $phone: $response | Error: $err");
+        if ($err) {
+            log_message('error', "Error Fonnte WA ke $phone: $err");
+        } else {
+            log_message('info', "Respon Fonnte WA ke $phone: $response");
+        }
     }
 
 }

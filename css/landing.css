@@ -733,4 +733,274 @@ footer a:hover {
         padding: 10px 0;
     }
 
+}/* ===========================
+   LANDING REFACTOR CLASSES
+=========================== */
+.landing-total-title {
+    font-size: 20px;
 }
+.landing-total-subtitle {
+    font-size: 15px;
+}
+.landing-card-padded {
+    padding: 1.75rem;
+}
+.landing-card-header {
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed var(--ds-border);
+}
+.landing-card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+.landing-icon-lg {
+    font-size: 1.25rem;
+}
+.landing-title-h3 {
+    font-size: 1.1rem;
+    margin: 0;
+}
+.landing-chart-scroll {
+    position: relative;
+    height: 320px;
+    width: 100%;
+    overflow-x: auto;
+}
+.landing-chart-wrapper {
+    min-width: 600px;
+    height: 100%;
+}
+.landing-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+.landing-toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+.landing-search-wrapper {
+    width: 200px;
+    margin-bottom: 0;
+    position: relative;
+}
+.landing-search-input {
+    padding: 0.5rem 0.5rem 0.5rem 2.25rem;
+    font-size: 0.85rem;
+}
+.landing-search-icon {
+    font-size: 0.95rem;
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+}
+.landing-filter-select {
+    width: 170px;
+    padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+    font-size: 0.85rem;
+}
+.landing-btn-reset {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+.landing-table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+.landing-table {
+    min-width: 1000px;
+    margin-bottom: 0;
+}
+.landing-table-thead {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+}
+.landing-th {
+    color: var(--ds-neutral);
+    font-weight: 500;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--ds-border);
+    padding: 1rem;
+}
+.landing-td {
+    padding: 1rem;
+}
+.landing-td-title {
+    padding: 1rem;
+    font-weight: 600;
+    color: var(--ds-dark);
+}
+.landing-td-muted {
+    padding: 1rem;
+    color: var(--ds-neutral);
+    font-size: 0.9rem;
+}
+.landing-td-sm {
+    padding: 1rem;
+    color: var(--ds-dark);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+.landing-td-desc {
+    padding: 1rem;
+    color: var(--ds-neutral);
+    font-size: 0.85rem;
+}
+.landing-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+.landing-badge-success {
+    background-color: #ECFDF5;
+    color: #10B981;
+    border: 1px solid #D1FAE5;
+}
+.landing-badge-warning {
+    background-color: #FFFBEB;
+    color: #F59E0B;
+    border: 1px solid #FEF3C7;
+}
+.landing-badge-danger {
+    background-color: #FEF2F2;
+    color: #EF4444;
+    border: 1px solid #FEE2E2;
+}
+.landing-link-btn {
+    padding: 0;
+    font-size: 1.15rem;
+    color: var(--ds-primary);
+}
+.landing-td-empty {
+    text-align: center;
+    color: var(--ds-neutral);
+    padding: 3rem;
+}
+.landing-pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--ds-border);
+}
+.landing-pagination-info {
+    color: var(--ds-neutral);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+.landing-pagination-pages {
+    display: flex;
+    gap: 0.25rem;
+}
+.landing-pagination-disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+.landing-pagination-ellipsis {
+    cursor: default;
+    border-color: transparent;
+}
+.landing-pagination-link {
+    text-decoration: none;
+}
+.landing-per-page-select {
+    padding: 0.35rem 2rem 0.35rem 0.75rem;
+    min-width: 130px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+}
+
+/* FOOTER INLINE CSS EXTRACT */
+.footer-logo {
+    max-height: 95px;
+}
+.footer-title {
+    color: white;
+    font-weight: 700;
+    font-size: 24px;
+}
+.footer-desc {
+    opacity: 0.9;
+    font-size: 13px;
+    line-height: 1.7;
+}
+.footer-heading {
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+}
+.footer-list {
+    font-size: 13px;
+    opacity: 0.9;
+}
+.footer-icon {
+    font-size: 16px;
+}
+.footer-copyright {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+/* SECTION TENTANG & INFORMASI INLINE EXTRACT */
+.info-icon-fallback-icon {
+    font-size: 120px;
+    color: #155bb5;
+}
+.tentang-logo-custom {
+    max-height: 120px;
+    object-fit: contain;
+}
+.tentang-border-left {
+    border-left-color: #0d47a1 !important;
+    border-left-width: 3px !important;
+}
+.tentang-title-custom {
+    color: #0d47a1;
+}
+.tentang-desc-custom {
+    font-size: 15px;
+    line-height: 1.8;
+}
+.tentang-icon-bg-primary {
+    background-color: #e8f0fe;
+}
+.tentang-icon-title {
+    color: #0d47a1;
+    font-size: 1.1rem;
+}
+.tentang-icon-bg-success {
+    background-color: #e6f4ea;
+}
+.tentang-icon-color-purple {
+    color: #6f42c1;
+    background-color: #f3e8ff;
+}
+.fitur-title-custom {
+    color: #000000;
+}
+.fitur-desc-custom {
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+

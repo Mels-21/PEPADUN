@@ -1,0 +1,187 @@
+/* users.css */
+
+/* Table Text Wrapping */
+.custom-table th, .custom-table td {
+    white-space: nowrap;
+}
+
+.custom-table {
+    width: 100%;
+    min-width: 2500px;
+}
+
+/* Header Card */
+.header-action-card {
+    margin-bottom: 2rem;
+    padding: 1rem 1.25rem;
+}
+
+.header-action-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.header-search-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.header-search-form {
+    margin: 0;
+    flex: 1;
+    max-width: 300px;
+}
+
+.header-search-input-wrapper {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.header-search-input {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 0.85rem;
+    width: 100%;
+}
+
+.header-search-icon {
+    font-size: 0.95rem;
+}
+
+/* Actions */
+.header-actions-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.btn-reset {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
+.btn-add-data {
+    background-color: #0c3d79;
+    border-color: #0c3d79;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.85rem;
+}
+
+/* Table Actions Sticky Column */
+.table-action-th {
+    text-align: center;
+    position: sticky;
+    right: 0;
+    background-color: #f8fafc;
+    z-index: 1;
+    box-shadow: -4px 0 8px rgba(0,0,0,0.05);
+    border-left: 2px solid #e2e8f0;
+}
+
+.table-action-td {
+    text-align: center;
+    white-space: nowrap;
+    position: sticky;
+    right: 0;
+    background-color: #fff;
+    z-index: 1;
+    box-shadow: -4px 0 8px rgba(0,0,0,0.05);
+    border-left: 2px solid #e2e8f0;
+}
+
+.action-buttons-wrapper {
+    display: inline-flex;
+    gap: 0.75rem;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.btn-icon-edit, .btn-icon-delete {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-icon-edit {
+    background-color: #F0F5FF;
+    color: #2563EB;
+}
+
+.btn-icon-delete {
+    background-color: #FFF0F0;
+    color: #EF4444;
+}
+
+.text-readonly {
+    font-size: 0.85rem;
+    color: var(--text-disabled);
+    font-style: italic;
+}
+
+/* Forms and Modals */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.modal-content {
+    max-width: 800px !important;
+    width: 90% !important;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.form-group-password {
+    margin-bottom: 20px;
+}
+
+.password-input-wrapper {
+    position: relative;
+}
+
+.password-input {
+    padding-right: 40px;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #64748b;
+    font-size: 1.1rem;
+}
+
+.form-label-required {
+    color: red;
+}
+
+.form-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: normal;
+}

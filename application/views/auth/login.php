@@ -32,14 +32,14 @@
 
             <!-- Flash alerts -->
             <?php if (session()->getFlashdata('error')): ?>
-                <div class="alert alert-danger" style="padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                <div class="alert alert-danger alert-custom">
                     <i class="bi bi-exclamation-circle-fill"></i>
                     <div><?= session()->getFlashdata('error') ?></div>
                 </div>
             <?php endif; ?>
 
             <?php if (session()->getFlashdata('success')): ?>
-                <div class="alert alert-success" style="padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                <div class="alert alert-success alert-custom">
                     <i class="bi bi-check-circle-fill"></i>
                     <div><?= session()->getFlashdata('success') ?></div>
                 </div>
@@ -67,7 +67,7 @@
                     <div class="input-icon-wrapper">
                         <i class="bi bi-lock left-icon"></i>
                         <input type="password" id="password" name="password" placeholder="Masukkan kata sandi Anda" value="<?= $pass_val ?>" required>
-                        <i class="bi bi-eye-slash right-icon" id="togglePassword" onclick="toggleLoginPassword()" style="cursor: pointer;"></i>
+                        <i class="bi bi-eye-slash right-icon" id="togglePassword" onclick="toggleLoginPassword()"></i>
                     </div>
                 </div>
 
@@ -76,28 +76,13 @@
                     <label for="ingat_saya">Ingat saya</label>
                 </div>
 
-                <button type="submit" class="btn-masuk" style="margin-bottom: 0;">
+                <button type="submit" class="btn-masuk mb-0">
                     Masuk
                 </button>
             </form>
         </div>
     </div>
 
-    <script>
-        function toggleLoginPassword() {
-            const password = document.getElementById('password');
-            const icon = document.getElementById('togglePassword');
-            
-            if (password.type === 'password') {
-                password.type = 'text';
-                icon.classList.remove('bi-eye-slash');
-                icon.classList.add('bi-eye');
-            } else {
-                password.type = 'password';
-                icon.classList.remove('bi-eye');
-                icon.classList.add('bi-eye-slash');
-            }
-        }
-    </script>
+    <script src="<?= base_url('js/login.js') ?>?v=<?= time() ?>"></script>
 </body>
 </html>

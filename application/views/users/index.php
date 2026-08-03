@@ -1,41 +1,35 @@
-<style>
-    th { white-space: nowrap; }
-    td { white-space: nowrap; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
-    .modal-content { max-width: 800px !important; width: 90% !important; max-height: 90vh; overflow-y: auto; }
-</style>
-
 <!-- Header Action Card -->
-<div class="card" style="margin-bottom: 2rem; padding: 1rem 1.25rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+<div class="card header-action-card">
+    <div class="header-action-container">
         <!-- Left side: Search -->
-        <div style="display: flex; align-items: center; gap: 1rem; flex: 1; flex-wrap: wrap;">
-            <form action="<?= base_url('users') ?>" method="GET" style="margin: 0; flex: 1; max-width: 300px;">
-                <div class="input-icon-wrapper" style="width: 100%; margin-bottom: 0;">
-                    <input type="text" id="search" name="search" class="form-control form-control-icon" placeholder="Cari pengguna..." value="<?= isset($searchQuery) ? esc($searchQuery) : '' ?>" autocomplete="off" style="padding-top: 0.5rem; padding-bottom: 0.5rem; font-size: 0.85rem; width: 100%;" onkeypress="if(event.keyCode === 13) { this.form.submit(); return false; }">
-                    <i class="bi bi-search" style="font-size: 0.95rem;"></i>
+        <div class="header-search-container">
+            <form action="<?= base_url('users') ?>" method="GET" class="header-search-form">
+                <div class="input-icon-wrapper header-search-input-wrapper">
+                    <input type="text" id="search" name="search" class="form-control form-control-icon header-search-input" placeholder="Cari pengguna..." value="<?= isset($searchQuery) ? esc($searchQuery) : '' ?>" autocomplete="off" onkeypress="if(event.keyCode === 13) { this.form.submit(); return false; }">
+                    <i class="bi bi-search header-search-icon"></i>
                 </div>
             </form>
         </div>
 
         <!-- Right side: Actions -->
-        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+        <div class="header-actions-container">
             <?php if (!empty($searchQuery)): ?>
-                <a href="<?= base_url('users') ?>" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                <a href="<?= base_url('users') ?>" class="btn btn-secondary btn-reset">
                     Reset
                 </a>
             <?php endif; ?>
             <!-- Right side: Actions -->
-            <button type="button" class="btn btn-primary" onclick="openAddModal()" style="background-color: #0c3d79; border-color: #0c3d79; padding: 0.5rem 1.25rem; font-size: 0.85rem;">
-                <i class="bi bi-person-plus-fill"></i> Tambah Data
-            </button>
+            <?php if (session()->get('role') === 'admin'): ?>
+                <button type="button" class="btn btn-primary btn-add-data" onclick="openAddModal()">
+                    <i class="bi bi-person-plus-fill"></i> Tambah Data
+                </button>
+            <?php endif; ?>
         </div>
     </div>
 </div>
 
 <div class="table-responsive">
-    <table id="usersTable" class="table table-striped table-bordered custom-table" style="width:100%; min-width: 2500px;">
+    <table id="usersTable" class="table table-striped table-bordered custom-table">
         <thead>
             <tr>
                 <th>No</th>
@@ -46,7 +40,6 @@
                 <th>Jabatan</th>
                 <th>Substansi</th>
                 <th>Image User</th>
-                <th>Level User</th>
                 <th>Status User</th>
                 <th>Telepon/WhatsApp</th>
                 <th>No Dosir</th>
@@ -77,7 +70,7 @@
                 <th>Kontrak Awal</th>
                 <th>Kontrak Akhir</th>
                 <th>Role Akses</th>
-                <th style="text-align: center; position: sticky; right: 0; background-color: #f8fafc; z-index: 1; box-shadow: -4px 0 8px rgba(0,0,0,0.05); border-left: 2px solid #e2e8f0;">Aksi</th>
+                <th class="table-action-th">Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -91,7 +84,6 @@
                     <td><?= esc($user['jabatan_id'] ?: '-') ?></td>
                     <td><?= esc($user['substansi_id'] ?: '-') ?></td>
                     <td><?= esc($user['image_user'] ?: '-') ?></td>
-                    <td><?= esc($user['level_user'] ?: '-') ?></td>
                     <td><?= esc($user['status_user'] ?: '-') ?></td>
                     <td><?= esc($user['telp'] ?: '-') ?></td>
                     <td><?= esc($user['no_dosir'] ?: '-') ?></td>
@@ -122,15 +114,17 @@
                     <td><?= esc($user['kontrak_awal'] ?: '-') ?></td>
                     <td><?= esc($user['kontrak_akhir'] ?: '-') ?></td>
                     <td><?= esc($user['role'] ?: '-') ?></td>
-                    <td style="text-align: center; white-space: nowrap; position: sticky; right: 0; background-color: #fff; z-index: 1; box-shadow: -4px 0 8px rgba(0,0,0,0.05); border-left: 2px solid #e2e8f0;">
-                        <div style="display: inline-flex; gap: 0.75rem; align-items: center; vertical-align: middle;">
-                            <button type="button" onclick='openEditModal(<?= htmlspecialchars(json_encode($user), ENT_QUOTES, "UTF-8") ?>)' title="Edit Karyawan" style="border: none; cursor: pointer; display: inline-flex; justify-content: center; align-items: center; width: 36px; height: 36px; font-size: 1.1rem; background-color: #F0F5FF; color: #2563EB; border-radius: 10px; transition: all 0.2s;">
-                                <i class="bi bi-pencil"></i>
-                            </button>
+                    <td class="table-action-td">
+                        <div class="action-buttons-wrapper">
                             <?php if (session()->get('role') === 'admin'): ?>
-                                <a href="<?= base_url('users/delete/' . $user['id_user']) ?>" title="Hapus Karyawan" onclick="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')" style="display: inline-flex; justify-content: center; align-items: center; width: 36px; height: 36px; font-size: 1.1rem; background-color: #FFF0F0; color: #EF4444; border-radius: 10px; text-decoration: none; transition: all 0.2s;">
+                                <button type="button" onclick='openEditModal(<?= htmlspecialchars(json_encode($user), ENT_QUOTES, "UTF-8") ?>)' title="Edit Karyawan" class="btn-icon-edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <a href="<?= base_url('users/delete/' . $user['id_user']) ?>" title="Hapus Karyawan" onclick="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')" class="btn-icon-delete">
                                     <i class="bi bi-trash"></i>
                                 </a>
+                            <?php else: ?>
+                                <span class="text-readonly">Hanya Lihat</span>
                             <?php endif; ?>
                         </div>
                     </td>
@@ -150,25 +144,25 @@
         <form action="<?= base_url('users/store') ?>" method="POST" enctype="multipart/form-data">
             <?= csrf_field() ?>
             
-            <div class="form-group" style="margin-bottom: 20px;">
-                <label for="add_password">Password <span style="color: red;">*</span></label>
-                <div style="position: relative;">
-                    <input type="password" id="add_password" name="password" class="form-control" placeholder="Masukkan password (minimal 6 karakter)..." required style="padding-right: 40px;">
-                    <i class="bi bi-eye-slash" id="toggle_add_password" onclick="togglePassword('add_password', 'toggle_add_password')" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #64748b; font-size: 1.1rem;"></i>
+            <div class="form-group form-group-password">
+                <label for="add_password">Password <span class="form-label-required">*</span></label>
+                <div class="password-input-wrapper">
+                    <input type="password" id="add_password" name="password" class="form-control password-input" placeholder="Masukkan password (minimal 6 karakter)..." required>
+                    <i class="bi bi-eye-slash password-toggle-icon" id="toggle_add_password" onclick="togglePassword('add_password', 'toggle_add_password')"></i>
                 </div>
             </div>
             
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="add_username">Username <span style="color: red;">*</span></label>
+                    <label for="add_username">Username <span class="form-label-required">*</span></label>
                     <input type="text" id="add_username" name="username" class="form-control" autocomplete="off" required>
                 </div>
                 <div class="form-group">
-                    <label for="add_email">Email <span style="color: red;">*</span></label>
+                    <label for="add_email">Email <span class="form-label-required">*</span></label>
                     <input type="text" id="add_email" name="email" class="form-control" autocomplete="off" required>
                 </div>
                 <div class="form-group">
-                    <label for="add_nama">Nama <span style="color: red;">*</span></label>
+                    <label for="add_nama">Nama <span class="form-label-required">*</span></label>
                     <input type="text" id="add_nama" name="nama" class="form-control" autocomplete="off" required>
                 </div>
                 <div class="form-group">
@@ -184,12 +178,8 @@
                     <input type="text" id="add_substansi_id" name="substansi_id" class="form-control" autocomplete="off" >
                 </div>
                 <div class="form-group">
-                    <label for="add_image_user">Image User <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">(Hanya foto)</span></label>
+                    <label for="add_image_user">Image User <span class="form-hint">(Hanya foto)</span></label>
                     <input type="file" id="add_image_user" name="image_user" accept="image/png, image/jpeg, image/jpg, image/gif" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="add_level_user">Level User</label>
-                    <input type="text" id="add_level_user" name="level_user" class="form-control" autocomplete="off" >
                 </div>
                 <div class="form-group">
                     <label for="add_status_user">Status User</label>
@@ -358,7 +348,7 @@
                 </div>
             </div>
             
-            <div class="modal-footer" style="margin-top: 20px;">
+            <div class="modal-footer mt-4">
                 <button type="button" class="btn btn-secondary" onclick="closeAddModal()">Batal</button>
                 <button type="submit" class="btn btn-primary">Simpan</button>
             </div>
@@ -376,25 +366,25 @@
         <form id="editForm" action="" method="POST" enctype="multipart/form-data">
             <?= csrf_field() ?>
             
-            <div class="form-group" style="margin-bottom: 20px;">
-                <label for="edit_password">Password <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">(Kosongkan jika tidak diubah)</span></label>
-                <div style="position: relative;">
-                    <input type="password" id="edit_password" name="password" class="form-control" placeholder="Masukkan password baru..." style="padding-right: 40px;">
-                    <i class="bi bi-eye-slash" id="toggle_edit_password" onclick="togglePassword('edit_password', 'toggle_edit_password')" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #64748b; font-size: 1.1rem;"></i>
+            <div class="form-group form-group-password">
+                <label for="edit_password">Password <span class="form-hint">(Kosongkan jika tidak diubah)</span></label>
+                <div class="password-input-wrapper">
+                    <input type="password" id="edit_password" name="password" class="form-control password-input" placeholder="Masukkan password baru...">
+                    <i class="bi bi-eye-slash password-toggle-icon" id="toggle_edit_password" onclick="togglePassword('edit_password', 'toggle_edit_password')"></i>
                 </div>
             </div>
             
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="edit_username">Username <span style="color: red;">*</span></label>
+                    <label for="edit_username">Username <span class="form-label-required">*</span></label>
                     <input type="text" id="edit_username" name="username" class="form-control" autocomplete="off" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit_email">Email <span style="color: red;">*</span></label>
+                    <label for="edit_email">Email <span class="form-label-required">*</span></label>
                     <input type="text" id="edit_email" name="email" class="form-control" autocomplete="off" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit_nama">Nama <span style="color: red;">*</span></label>
+                    <label for="edit_nama">Nama <span class="form-label-required">*</span></label>
                     <input type="text" id="edit_nama" name="nama" class="form-control" autocomplete="off" required>
                 </div>
                 <div class="form-group">
@@ -410,13 +400,9 @@
                     <input type="text" id="edit_substansi_id" name="substansi_id" class="form-control" autocomplete="off" >
                 </div>
                 <div class="form-group">
-                    <label for="edit_image_user">Image User <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">(Kosongkan jika tidak diubah)</span></label>
+                    <label for="edit_image_user">Image User <span class="form-hint">(Kosongkan jika tidak diubah)</span></label>
                     <input type="file" id="edit_image_user" name="image_user" accept="image/png, image/jpeg, image/jpg, image/gif" class="form-control">
                     <input type="hidden" id="edit_old_image_user" name="old_image_user">
-                </div>
-                <div class="form-group">
-                    <label for="edit_level_user">Level User</label>
-                    <input type="text" id="edit_level_user" name="level_user" class="form-control" autocomplete="off" >
                 </div>
                 <div class="form-group">
                     <label for="edit_status_user">Status User</label>
@@ -576,7 +562,7 @@
                     <input type="date" id="edit_kontrak_akhir" name="kontrak_akhir" class="form-control" autocomplete="off" >
                 </div>
                 <div class="form-group">
-                    <label for="edit_role">Role Akses <span style="color: red;">*</span></label>
+                    <label for="edit_role">Role Akses <span class="form-label-required">*</span></label>
                     <select id="edit_role" name="role" class="select-control" required>
                         <option value="karyawan">Karyawan</option>
                         <option value="admin">Admin</option>
@@ -584,7 +570,7 @@
                 </div>
             </div>
             
-            <div class="modal-footer" style="margin-top: 20px;">
+            <div class="modal-footer mt-4">
                 <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Batal</button>
                 <button type="submit" class="btn btn-primary">Simpan</button>
             </div>
@@ -595,125 +581,5 @@
 
 
 <script>
-    const addModal = document.getElementById('addModal');
-    const editModal = document.getElementById('editModal');
-    const editForm = document.getElementById('editForm');
-
-    function openAddModal() {
-        if(addModal) {
-            addModal.classList.add('show');
-        } else {
-            alert("Error: addModal element not found in HTML!");
-        }
-    }
-
-    function closeAddModal() {
-        if(addModal) addModal.classList.remove('show');
-    }
-
-    function openEditModal(userData) {
-        console.log("Opening edit modal for:", userData);
-        if(!editModal || !editForm) {
-            alert("Error: editModal or editForm not found!");
-            return;
-        }
-        
-        editForm.action = `<?= base_url('users/update') ?>/${userData.id_user}`;
-        
-        for (const key in userData) {
-            const el = document.getElementById('edit_' + key);
-            if (el && key !== 'password') {
-                if (key === 'image_user') {
-                    const hiddenEl = document.getElementById('edit_old_image_user');
-                    if (hiddenEl) hiddenEl.value = userData[key] || '';
-                    continue;
-                }
-
-                let val = userData[key];
-                
-                // If it's a date input and the value looks like DD/MM/YYYY, convert it to YYYY-MM-DD
-                if (el.type === 'date' && val && val.includes('/')) {
-                    let parts = val.split('/');
-                    if (parts.length === 3) {
-                        val = `${parts[2]}-${parts[1]}-${parts[0]}`;
-                    }
-                }
-                
-                el.value = val;
-            }
-        }
-        
-        const pwd = document.getElementById('edit_password');
-        if(pwd) {
-            pwd.value = '';
-        }
-        
-        editModal.classList.add('show');
-    }
-
-    function closeEditModal() {
-        if(editModal) editModal.classList.remove('show');
-    }
-
-    window.onclick = function(event) {
-        if (event.target === addModal) {
-            closeAddModal();
-        }
-        if (event.target === editModal) {
-            closeEditModal();
-        }
-    }
-
-    function togglePassword(inputId, iconId) {
-        const input = document.getElementById(inputId);
-        const icon = document.getElementById(iconId);
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.remove('bi-eye-slash');
-            icon.classList.add('bi-eye');
-        } else {
-            input.type = 'password';
-            icon.classList.remove('bi-eye');
-            icon.classList.add('bi-eye-slash');
-        }
-    }
-
-    // Live Search Debounce logic
-    let debounceTimer;
-    const searchInput = document.getElementById('search');
-
-    window.addEventListener('DOMContentLoaded', (event) => {
-        if (sessionStorage.getItem('searchFocus') === '1' && searchInput) {
-            searchInput.focus();
-            const val = searchInput.value;
-            searchInput.value = '';
-            searchInput.value = val;
-            sessionStorage.removeItem('searchFocus');
-        } else if (searchInput && searchInput.value !== '') {
-            searchInput.focus();
-            const val = searchInput.value;
-            searchInput.value = '';
-            searchInput.value = val;
-        }
-
-        if (searchInput) {
-            searchInput.addEventListener('input', function() {
-                clearTimeout(debounceTimer);
-                if (this.value === '') {
-                    sessionStorage.setItem('searchFocus', '1');
-                    this.form.submit();
-                    return;
-                }
-                debounceTimer = setTimeout(() => {
-                    sessionStorage.setItem('searchFocus', '1');
-                    this.form.submit();
-                }, 600);
-            });
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    sessionStorage.setItem('searchFocus', '1');
-                }
-            });
-        }
-    });
+    const URL_USER_UPDATE = '<?= base_url('users/update') ?>';
 </script>

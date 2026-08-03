@@ -20,9 +20,21 @@
             $CI =& get_instance();
             $segment = $CI->uri->segment(1);
             
-            // Dynamic years based on current year
+            // Dynamic years: fetch all distinct years from the database
+            $yearQuery = $CI->db->select('year')->distinct()->get('monitoring')->result_array();
+            $dbYears = array_column($yearQuery, 'year');
+            
+            // Ensure all years from 2025 to current year are present
             $currentYear = (int) date('Y');
-            $years = [$currentYear, $currentYear - 1];
+            $startYear = 2025;
+            $loopYears = [];
+            for ($y = $currentYear; $y >= $startYear; $y--) {
+                $loopYears[] = $y;
+            }
+            
+            // Combine all DB years and loop years, and sort descending
+            $years = array_unique(array_merge($dbYears, $loopYears));
+            rsort($years);
             
             $selectedYear = (int) ($CI->input->get('year') !== NULL ? $CI->input->get('year') : date('Y'));
             $selectedTriwulan = (int) ($CI->input->get('triwulan') !== NULL ? $CI->input->get('triwulan') : ceil(date('m') / 3));
@@ -45,7 +57,7 @@
                 <i class="bi <?= ($segment === 'monitoring') ? 'bi-chevron-up' : 'bi-chevron-down' ?> dropdown-chevron" style="font-size: 0.8rem;"></i>
             </a>
             
-            <!-- 3 dynamic years sub-menu dropdown (based on current year) -->
+            <!-- Dynamic years sub-menu dropdown (based on database records and current year) -->
             <ul class="sidebar-submenu <?= ($segment === 'monitoring') ? 'show' : '' ?>">
                 <?php foreach ($years as $yr): ?>
                     <li class="sidebar-submenu-item <?= ($segment === 'monitoring' && $selectedYear === $yr) ? 'active' : '' ?>">
@@ -57,7 +69,6 @@
             </ul>
         </li>
 
-        <?php if (session()->get('role') === 'admin'): ?>
             <li class="sidebar-item <?= ($segment === 'categories') ? 'active' : '' ?>">
                 <a href="<?= base_url('categories') ?>" class="sidebar-link" data-title="Kategori">
                     <div class="sidebar-link-content">
@@ -75,7 +86,6 @@
                     </div>
                 </a>
             </li>
-        <?php endif; ?>
     </ul>
 
     <!-- Sidebar Footer -->
@@ -87,57 +97,4 @@
     </div>
 </aside>
 
-<!-- Self-contained Sidebar logic script -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // 1. Collapse / Expand Sidebar Toggle logic
-        const toggleBtn = document.getElementById('sidebarToggle');
-        if (toggleBtn) {
-            const icon = toggleBtn.querySelector('i');
-            
-            // Restore collapsed state from localStorage
-            if (localStorage.getItem('sidebar-collapsed') === 'true') {
-                document.body.classList.add('sidebar-collapsed');
-            }
-            
-            toggleBtn.addEventListener('click', () => {
-                document.body.classList.toggle('sidebar-collapsed');
-                const isCollapsed = document.body.classList.contains('sidebar-collapsed');
-                localStorage.setItem('sidebar-collapsed', isCollapsed);
-            });
-        }
 
-        // Expand sidebar when clicking on the brand logo while collapsed
-        const brandLogo = document.getElementById('sidebarBrand');
-        if (brandLogo) {
-            brandLogo.addEventListener('click', (e) => {
-                if (document.body.classList.contains('sidebar-collapsed')) {
-                    e.preventDefault();
-                    document.body.classList.remove('sidebar-collapsed');
-                    localStorage.setItem('sidebar-collapsed', 'false');
-                }
-            });
-        }
-
-        // 2. Monitoring Dropdown Year submenu Click-Toggle logic
-        const monitoringLink = document.querySelector('.sidebar-link-monitoring');
-        const submenu = document.querySelector('.sidebar-submenu');
-        
-        if (monitoringLink && submenu) {
-            monitoringLink.addEventListener('click', (e) => {
-                // If we are already on the monitoring page, toggle submenu without reloading
-                if (window.location.pathname.includes('monitoring')) {
-                    e.preventDefault();
-                    submenu.classList.toggle('show');
-                    
-                    // Toggle chevron icon direction
-                    const chevron = monitoringLink.querySelector('.dropdown-chevron');
-                    if (chevron) {
-                        chevron.classList.toggle('bi-chevron-down');
-                        chevron.classList.toggle('bi-chevron-up');
-                    }
-                }
-            });
-        }
-    });
-</script>
