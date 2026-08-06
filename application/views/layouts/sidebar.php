@@ -68,6 +68,15 @@
                 <?php endforeach; ?>
             </ul>
         </li>
+        
+        <li class="sidebar-item <?= ($segment === 'laporan') ? 'active' : '' ?>">
+            <a href="<?= base_url("laporan?year={$selectedYear}&triwulan={$selectedTriwulan}") ?>" class="sidebar-link" data-title="Laporan">
+                <div class="sidebar-link-content">
+                    <i class="bi bi-file-earmark-text"></i>
+                    <span>Laporan</span>
+                </div>
+            </a>
+        </li>
 
             <li class="sidebar-item <?= ($segment === 'categories') ? 'active' : '' ?>">
                 <a href="<?= base_url('categories') ?>" class="sidebar-link" data-title="Kategori">

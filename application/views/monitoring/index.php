@@ -67,30 +67,6 @@
                     <i class="bi bi-plus-lg"></i> Tambah
                 </button>
                 <?php endif; ?>
-                <?php
-                    $exportQuery = "year={$selectedYear}&triwulan={$selectedTriwulan}";
-                    if (!empty($selectedCategory)) $exportQuery .= "&category=" . urlencode($selectedCategory);
-                    if (!empty($selectedStatus)) $exportQuery .= "&status=" . urlencode($selectedStatus);
-                    if (!empty($searchQuery)) $exportQuery .= "&search=" . urlencode($searchQuery);
-                ?>
-                
-                <!-- Custom Export Dropdown -->
-                <div class="export-dropdown-wrapper" onmouseover="this.querySelector('.export-menu-container').style.display='block'" onmouseout="this.querySelector('.export-menu-container').style.display='none'">
-                    <button type="button" class="btn btn-secondary export-dropdown-btn">
-                        <i class="bi bi-download"></i> Export <i class="bi bi-chevron-down export-dropdown-icon"></i>
-                    </button>
-                    <!-- padding-top is used to bridge the hover gap between button and menu -->
-                    <div class="export-menu-container" style="display: none;">
-                        <div class="export-menu-card">
-                            <a href="<?= base_url('monitoring/export_excel?' . $exportQuery) ?>" id="exportExcelBtn" class="export-item">
-                                <i class="bi bi-file-earmark-excel export-item-icon-excel"></i> Excel
-                            </a>
-                            <a href="<?= base_url('monitoring/export_pdf?' . $exportQuery) ?>" id="exportPdfBtn" target="_blank" class="export-item">
-                                <i class="bi bi-file-earmark-pdf export-item-icon-pdf"></i> PDF
-                            </a>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </form>

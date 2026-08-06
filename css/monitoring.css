@@ -302,6 +302,8 @@
 
 .modal-content-lg {
     max-width: 650px;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .modal-subtitle {
